@@ -1,6 +1,6 @@
 from flask import Flask
 
-from app.Sensors.LightSensor.LightSensor import tLightSensor
+from app.Sensors.LightSensor import tLightSensor
 
 app = Flask(__name__)
 light_sensor = tLightSensor()
