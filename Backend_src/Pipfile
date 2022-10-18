@@ -4,12 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
 phidget22 = "*"
+flask = "*"
 flask-restful = "*"
+gunicorn = "*"
+colorama = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
-python_full_version = "3.10.7"

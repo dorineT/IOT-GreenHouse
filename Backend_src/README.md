@@ -34,3 +34,5 @@ flask --app \app.py run
 ```
 
 Then, for example, curl at **<http://localhost:5000/light>**
+
+**In Production mode**: do no use flask but rather gunicorn and nginx (work for later)
