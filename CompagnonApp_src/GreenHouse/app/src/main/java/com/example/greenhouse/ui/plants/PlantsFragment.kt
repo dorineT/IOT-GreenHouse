@@ -1,4 +1,4 @@
-package com.example.greenhouse.ui.gallery
+package com.example.greenhouse.ui.plants
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.greenhouse.databinding.FragmentGalleryBinding
+import com.example.greenhouse.databinding.FragmentPlantsBinding
 
-class GalleryFragment : Fragment() {
+class PlantsFragment : Fragment() {
 
-    private var _binding: FragmentGalleryBinding? = null
+    private var _binding: FragmentPlantsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class GalleryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+        val plantsViewModel =
+            ViewModelProvider(this).get(PlantsViewModel::class.java)
 
-        _binding = FragmentGalleryBinding.inflate(inflater, container, false)
+        _binding = FragmentPlantsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
+        plantsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
