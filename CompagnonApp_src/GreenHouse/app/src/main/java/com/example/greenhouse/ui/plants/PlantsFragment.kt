@@ -28,10 +28,12 @@ class PlantsFragment : Fragment() {
         _binding = FragmentPlantsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textGallery
+        /*val textView: TextView = binding.textGallery
         plantsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
-        }
+        }*/
+
+
         return root
     }
 
