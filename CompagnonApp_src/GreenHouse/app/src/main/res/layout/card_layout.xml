@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="96dp"
     android:layout_marginTop="12dp"
@@ -15,43 +16,82 @@
     android:clickable="true"
     android:focusable="true">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent"
+        android:layout_constraintBottom_toBottomOf="@+id/card_plant"
+        android:layout_constraintTop_toTopOf="parent"
+        android:layout_constraintVertical_bias="0.511"
+        tools:layout_editor_absoluteX="-55dp">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageViewPlant"
-                android:layout_width="45dp"
-                android:layout_height="53dp"
-                android:layout_gravity="center"
-                card_view:srcCompat="@drawable/flower"
-                android:contentDescription="plant_image" />
+                <ImageView
+                    android:id="@+id/imageViewPlant"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/plant_image"
+                    card_view:srcCompat="@drawable/flower" />
 
-            <TextView
-                android:id="@+id/textPlant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:text="@string/plant_name"
-                android:textColor="#616161" />
+                <TextView
+                    android:id="@+id/textPlant"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/comic_neue_bold_italic"
+                    android:gravity="start"
+                    android:text="@string/plant_name"
+                    android:textColor="@color/brown"
+                    android:textSize="24sp" />
 
-            <ImageButton
-                android:id="@+id/imageButton_arrowdown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:contentDescription="@string/arrow_down"
-                android:minHeight="48dp"
-                card_view:srcCompat="@drawable/ic_arrow_down" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="368dp"
+            android:layout_height="201dp">
+
+            <TextView
+                android:id="@+id/textView_temp"
+                android:layout_width="209dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="90dp"
+                android:text="@string/temperature"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_periode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/periode"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView_temp"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <TextView
+                android:id="@+id/textView_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:text="@string/descripiton"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView_periode"
+                tools:layout_editor_absoluteX="0dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
