@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.greenhouse.R
 import com.example.greenhouse.databinding.FragmentPlantsBinding
 
 class PlantsFragment : Fragment() {
@@ -16,6 +19,10 @@ class PlantsFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var adapterPlant : PlantAdapter
+    private lateinit var recycler : RecyclerView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,8 +40,18 @@ class PlantsFragment : Fragment() {
             textView.text = it
         }*/
 
-
         return root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val layoutManager = LinearLayoutManager(context)
+        recycler = view.findViewById(R.id.recycler_view)
+        recycler.layoutManager = layoutManager
+        recycler.setHasFixedSize(true)
+        adapterPlant = PlantAdapter()
+        recycler.adapter = adapterPlant
     }
 
     override fun onDestroyView() {
