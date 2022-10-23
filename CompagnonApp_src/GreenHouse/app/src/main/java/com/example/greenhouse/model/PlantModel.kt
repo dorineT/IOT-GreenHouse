@@ -32,5 +32,12 @@ class PlantModel(
         return result
     }
 
+    fun getPeriode(): String{
+        var s = ""
+        for(i in periode.indices){
+            s = s+ periode[i] + ", "
+        }
+        return s
+    }
 
 }
