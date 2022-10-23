@@ -1,11 +1,11 @@
 package com.example.greenhouse.model
 
-data class PlantModel(
+class PlantModel(
     val image: Int,
     val name: String,
     val temp: Float,
     val periode: Array<String>,
-    val description: String
+    val description: String,
     ) {
 
     override fun equals(other: Any?): Boolean {

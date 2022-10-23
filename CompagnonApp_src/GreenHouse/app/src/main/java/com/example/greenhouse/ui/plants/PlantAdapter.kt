@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greenhouse.R
@@ -31,7 +32,7 @@ class PlantAdapter(private val arrayPlants: ArrayList<PlantModel>) : RecyclerVie
         holder.item_plant_description.text =current.description
 
 
-        /*holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             if (holder.sub_item.visibility == View.VISIBLE) {
                 // The transition of the hiddenView is carried out by the TransitionManager class.
                 // Here we use an object of the AutoTransition Class to create a default transition
@@ -45,7 +46,7 @@ class PlantAdapter(private val arrayPlants: ArrayList<PlantModel>) : RecyclerVie
                 }
                 holder.sub_item.visibility = View.VISIBLE
             }
-        }*/
+        }
     }
 
     override fun getItemCount(): Int {
@@ -59,8 +60,8 @@ class PlantAdapter(private val arrayPlants: ArrayList<PlantModel>) : RecyclerVie
         var item_plant_temperature : TextView = itemView.findViewById(R.id.textView_temp)
         var item_plant_periode : TextView = itemView.findViewById(R.id.textView_periode)
         var item_plant_description : TextView = itemView.findViewById(R.id.textView_description)
-        var sub_item: LinearLayout = itemView.findViewById(R.id.sub_item)
         var cardView : CardView = itemView.findViewById(R.id.card_plant)
+        var sub_item : LinearLayout = itemView.findViewById(R.id.sub_item)
 
     }
 }

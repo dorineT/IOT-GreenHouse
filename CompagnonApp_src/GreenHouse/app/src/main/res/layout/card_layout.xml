@@ -1,97 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="96dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_plant"
-    card_view:cardBackgroundColor="#F6E6E6"
-    card_view:cardCornerRadius="20dp"
-    card_view:contentPadding="10dp"
-    android:foreground="?selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
     android:clickable="true"
-    android:focusable="true">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_constraintBottom_toBottomOf="@+id/card_plant"
-        android:layout_constraintTop_toTopOf="parent"
-        android:layout_constraintVertical_bias="0.511"
-        tools:layout_editor_absoluteX="-55dp">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    android:focusable="true"
+    app:cardBackgroundColor="#F6E6E6"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    app:contentPadding="10dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageViewPlant"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/plant_image"
-                    card_view:srcCompat="@drawable/flower" />
+            <ImageView
+                android:id="@+id/imageViewPlant"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/plant_image"
+                app:srcCompat="@drawable/flower" />
 
-                <TextView
-                    android:id="@+id/textPlant"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/comic_neue_bold_italic"
-                    android:gravity="start"
-                    android:text="@string/plant_name"
-                    android:textColor="@color/brown"
-                    android:textSize="24sp" />
-
+            <TextView
+                android:id="@+id/textPlant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|clip_vertical"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/comic_neue_bold_italic"
+                android:text="@string/plant_name"
+                android:textColor="@color/brown"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="368dp"
-            android:layout_height="201dp">
+        <LinearLayout
+            android:id="@+id/sub_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textView_temp"
-                android:layout_width="209dp"
-                android:layout_height="22dp"
-                android:layout_marginTop="90dp"
-                android:text="@string/temperature"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/temperature" />
 
             <TextView
                 android:id="@+id/textView_periode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@string/periode"
-                card_view:layout_constraintTop_toBottomOf="@+id/textView_temp"
-                tools:layout_editor_absoluteX="0dp" />
+                android:text="@string/periode" />
 
             <TextView
                 android:id="@+id/textView_description"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:text="@string/descripiton"
-                card_view:layout_constraintTop_toBottomOf="@+id/textView_periode"
-                tools:layout_editor_absoluteX="0dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:text="@string/descripiton" />
+        </LinearLayout>
+
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

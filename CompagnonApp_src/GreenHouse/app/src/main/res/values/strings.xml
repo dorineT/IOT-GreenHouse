@@ -13,7 +13,7 @@
 
 
     <string name="plant_name">Plant name</string>
-    <string name="temperature">Température</string>
+    <string name="temperature">temperature</string>
     <string name="descripiton">Description</string>
     <string name="periode">periodes</string>
     <string name="plant_image">plante image</string>
