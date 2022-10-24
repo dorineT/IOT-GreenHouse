@@ -1,4 +1,4 @@
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_plant"
@@ -7,8 +7,7 @@
     android:layout_margin="15dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardBackgroundColor="#F6E6E6"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="2dp"
     app:cardElevation="10dp"
     app:contentPadding="10dp">
 
@@ -72,4 +71,4 @@
     </LinearLayout>
 
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

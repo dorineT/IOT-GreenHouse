@@ -19,7 +19,6 @@
     <string name="plant_image">plante image</string>
 
 
-
     <string name="name_1">Basilic</string>
     <string name="name_2">Thym</string>
     <string name="name_3">Romarin</string>
@@ -30,6 +29,8 @@
     <string name="desc_2">Cette plante est cultivée pour des usages aromatiques, mais aussi médicinaux. En Asie tropicale, le basilic est considéré comme une plante vivace. Dans les climats plus doux, le basilic commun se comporte en annuelle.</string>
     <string name="desc_3">Cette plante est cultivée pour des usages aromatiques, mais aussi médicinaux. En Asie tropicale, le basilic est considéré comme une plante vivace. Dans les climats plus doux, le basilic commun se comporte en annuelle.</string>
     <string name="desc_4">Cette plante est cultivée pour des usages aromatiques, mais aussi médicinaux. En Asie tropicale, le basilic est considéré comme une plante vivace. Dans les climats plus doux, le basilic commun se comporte en annuelle.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

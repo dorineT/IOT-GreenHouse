@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.greenhouse.R
 import com.example.greenhouse.databinding.FragmentPlantsBinding
 import com.example.greenhouse.model.PlantModel
+import com.google.android.material.snackbar.Snackbar
 
 class PlantsFragment : Fragment() {
 
@@ -46,6 +47,10 @@ class PlantsFragment : Fragment() {
         plantsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }*/
+        binding.fabAddPlant.setOnClickListener { view ->
+            Snackbar.make(view, "Add plant", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
 
         return root
     }
