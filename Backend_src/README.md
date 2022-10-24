@@ -4,7 +4,7 @@
 
 ### Language
 
-Language: **Python**
+Language: **Python**  
 Version: **3.10.7**
 
 ### Virtual environment
@@ -33,6 +33,6 @@ In dev mode:
 flask --app \app.py run
 ```
 
-Then, for example, curl at **<http://localhost:5000/light>**
+Then, for example, curl at **<http://localhost:5000/poll>**
 
 **In Production mode**: do no use flask but rather gunicorn and nginx (work for later)

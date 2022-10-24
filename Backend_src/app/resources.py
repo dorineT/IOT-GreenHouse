@@ -1,15 +1,9 @@
 from flask_restful import Resource
 
-from app import light_sensor
-
-from app.Sensors.Errors import NotYetAttachedError
+from app import green_house_manager
 
 
-class LightSensor(Resource):
+class SensorValues(Resource):
     def get(self):
-        value = -1
-        try:
-            value = light_sensor.value()
-        except NotYetAttachedError:
-            pass
-        return {'lux': value}
+        v = green_house_manager.summary()
+        return v, 200

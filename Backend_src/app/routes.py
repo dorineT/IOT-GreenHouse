@@ -1,7 +1,7 @@
 from flask_restful import Api
 
 from app import app
-from app.resources import LightSensor
+from app.resources import SensorValues
 
 
 @app.route('/')
@@ -11,4 +11,4 @@ def index() -> str:
 
 
 api = Api(app)
-api.add_resource(LightSensor, '/light')
+api.add_resource(SensorValues, '/poll')

@@ -1,9 +1,9 @@
 from flask import Flask
 
-from app.Sensors.LightSensor import tLightSensor
+from app.manager.GreenHouseManager import GreenHouseManager
 
 app = Flask(__name__)
-light_sensor = tLightSensor()
-light_sensor.start()
+green_house_manager = GreenHouseManager(poll_secdelay=5, sensor_millidelay=5000)
+green_house_manager.start()
 
 from app import routes
