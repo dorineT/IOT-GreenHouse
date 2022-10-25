@@ -54,9 +54,17 @@ class GreenHouseManager(Thread):
             self.sensors[stype] = sensor, nvalue
 
     def _cron_job(self) -> None:
-        # Put here the greenhouse logic
+        t0 = time()
+
+        # Put here the greenhouse logig
         self._poll()
-        self.scheduler.enter(self.poll_mindelay, 1, self._cron_job)
+
+
+        # Computing time delay necessary to run cron job 
+        # exactly poll_mindelay minutes after previous one
+        elapsed = time() - t0
+        ndelay = self.poll_mindelay - elapsed if self.poll_mindelay - elapsed > 0 else 0.0
+        self.scheduler.enter(ndelay, 1, self._cron_job)
 
 
     def run(self) -> None:
