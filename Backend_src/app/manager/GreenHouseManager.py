@@ -19,7 +19,7 @@ class GreenHouseManager(Thread):
             sensor_millidelay: int = 5000) -> None:
 
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
-        self.poll_mindelay: int = poll_mindelay #* 60
+        self.poll_mindelay: int = poll_mindelay * 60
         self.sensor_millidelay: dict[SensorType, tuple[Sensor, float | None]] = sensor_millidelay
 
         self.sensors = {
