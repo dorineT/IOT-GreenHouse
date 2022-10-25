@@ -1,5 +1,6 @@
 import sched
 
+from concurrent.futures import ThreadPoolExecutor
 from time import time, sleep
 from threading import Thread
 
@@ -12,18 +13,14 @@ from app.manager.sensors.phidgets import cLightSensor, cTempSensor
 
 class GreenHouseManager(Thread):
 
-    scheduler: sched.scheduler
-    poll_secdelay: int
-    sensors: dict[SensorType, tuple[Sensor, float | None]]
-
     def __init__(
             self,
-            poll_secdelay: int = 30,
+            poll_mindelay: int = 30,
             sensor_millidelay: int = 5000) -> None:
 
-        self.scheduler = sched.scheduler(time, sleep)
-        self.poll_secdelay = poll_secdelay
-        self.sensor_millidelay = sensor_millidelay
+        self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
+        self.poll_mindelay: int = poll_mindelay #* 60
+        self.sensor_millidelay: dict[SensorType, tuple[Sensor, float | None]] = sensor_millidelay
 
         self.sensors = {
             SensorType.LIGHT: (
@@ -38,22 +35,35 @@ class GreenHouseManager(Thread):
 
     def _poll(self) -> None:
 
-        for stype, (sensor, _) in self.sensors.items():
+        def actualize(stype: SensorType, sensor: Sensor, delay: int) -> float | None:
+            nvalue = None
             try:
-                self.sensors[stype] = sensor, sensor.value(
-                    self.sensor_millidelay)
+                nvalue = sensor.value(delay)
             except PhidgetException:
-                self.sensors[stype] = sensor, None
+                print(f'{stype.value} sent an error')
             except NotYetAttachedError:
-                self.sensors[stype] = sensor, None
+                print(f'{stype.value} was not attached')
+            return nvalue
 
-        self.scheduler.enter(self.poll_secdelay, 1, self._poll)
+        # Phidget's Open method is blocking its thread
+        with ThreadPoolExecutor() as executor:
+            futures = [executor.submit(actualize, stype, sensor, self.sensor_millidelay) for stype, (sensor, _) in self.sensors.items()]
+            values = [f.result() for f in futures]
+
+        for (stype, (sensor, _)), nvalue in zip(self.sensors.items(), values):
+            self.sensors[stype] = sensor, nvalue
+
+    def _cron_job(self) -> None:
+        # Put here the greenhouse logic
+        self._poll()
+        self.scheduler.enter(self.poll_mindelay, 1, self._cron_job)
+
 
     def run(self) -> None:
-        self.scheduler.enter(self.poll_secdelay, 1, self._poll)
+        self.scheduler.enter(self.poll_mindelay, 1, self._cron_job)
         self.scheduler.run()
 
     def summary(self) -> dict[str, float | None]:
-        # can be called from outside
+        self._poll()
         return {stype.value: value
                 for stype, (_, value) in self.sensors.items()}
