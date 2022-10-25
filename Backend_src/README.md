@@ -36,3 +36,8 @@ flask --app \app.py run
 Then, for example, curl at **<http://localhost:5000/poll>**
 
 **In Production mode**: do no use flask but rather gunicorn and nginx (work for later)
+
+### Useful links
+
+<https://artisan-roasterscope.blogspot.com/2017/01/connecting-phidgets-on-linux.html>  
+<https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-20-04>

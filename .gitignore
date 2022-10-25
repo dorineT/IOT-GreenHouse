@@ -2,3 +2,6 @@
 Backend_src/app/__pycache__/
 Backend_src/app/manager/__pycache__/
 Backend_src/app/manager/sensors/__pycache__/
+
+# Removing mypy cache
+Backend_src/.mypy_cache/
