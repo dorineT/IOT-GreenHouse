@@ -1,6 +1,6 @@
 package com.example.greenhouse.model
 
-class PlantModel(
+data class PlantModel(
     val image: Int,
     val name: String,
     val temp: Float,
