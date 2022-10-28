@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greenhouse.R
@@ -48,8 +49,10 @@ class PlantsFragment : Fragment() {
             textView.text = it
         }*/
         binding.fabAddPlant.setOnClickListener { view ->
-            Snackbar.make(view, "Add plant", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            /*Snackbar.make(view, "Add plant", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()*/
+
+            Navigation.findNavController(view).navigate(R.id.action_nav_plants_to_addPlantFragment);
         }
 
         return root

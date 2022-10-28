@@ -15,11 +15,24 @@
         android:id="@+id/nav_plants"
         android:name="com.example.greenhouse.ui.plants.PlantsFragment"
         android:label="@string/menu_plants"
-        tools:layout="@layout/fragment_plants" />
+        tools:layout="@layout/fragment_plants" >
+        <action
+            android:id="@+id/action_nav_plants_to_addPlantFragment"
+            app:destination="@id/addPlantFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_house"
         android:name="com.example.greenhouse.ui.house.HouseFragment"
         android:label="@string/menu_house"
         tools:layout="@layout/fragment_house" />
+    <fragment
+        android:id="@+id/addPlantFragment"
+        android:name="com.example.greenhouse.ui.plants.AddPlantFragment"
+        android:label="fragment_add_plant"
+        tools:layout="@layout/fragment_add_plant" />
 </navigation>
