@@ -9,16 +9,19 @@ import {
   Spacer,
   FlatList,
   Pressable,
+  Fab
 } from "native-base";
-
+import { Ionicons } from '@expo/vector-icons';
 import data from "../../dataPlants.json";
 
 export function PlantsScreen({ navigation }) {
   return (
     <Box>
-      <Heading fontSize="xl" p="4" pb="3">
-        Inbox
-      </Heading>
+      <Fab placement="top-right"  style={{backgroundColor: 'white'}} renderInPortal={false} shadow={6} 
+       icon={<Ionicons name="ios-add" size={25} color="green" />} 
+       onPress={() => {navigation.navigate('Mes plantes',{
+        screen: 'Nouvelle plante'        
+       })}} />
       <FlatList
         data={data}
         renderItem={({ item }) => (
@@ -27,14 +30,14 @@ export function PlantsScreen({ navigation }) {
               borderColor: "muted.50",
             }}
             borderColor="muted.800"
-            pl={["0", "4"]}
-            pr={["0", "5"]}
-            py="2"
+            marginLeft={4}
+            marginRight={4}
+            py={2}
           >
             <Pressable maxW="96"
                 onPress={() => {navigation.navigate('Mes plantes',{
-                    screen: 'InfoPlante',               
-                    params: {id: item.id}
+                    screen: 'Détails',               
+                    params: {item: item}
                 })}}
             >
               {({ isHovered, isFocused, isPressed }) => {
@@ -60,44 +63,24 @@ export function PlantsScreen({ navigation }) {
                     borderWidth="1"
                     borderColor="coolGray.300"
                   >
-                    <HStack space={[2, 3]} justifyContent="space-between">
+                    <HStack space={6} justifyContent="flex-start">
                       <Avatar
                         size="48px"
                         source={{
-                          uri: item.avatarUrl,
+                          uri: item.image
                         }}
-                      />
-                      <VStack>
-                        <Text
+                      />                     
+                        <Heading
                           _dark={{
                             color: "warmGray.50",
                           }}
                           color="coolGray.800"
                           bold
+                          italic
                         >
-                          {item.fullName}
-                        </Text>
-                        <Text
-                          color="coolGray.600"
-                          _dark={{
-                            color: "warmGray.200",
-                          }}
-                        >
-                          {item.recentText}
-                        </Text>
-                      </VStack>
-                      <Spacer />
-                      <Text
-                        fontSize="xs"
-                        _dark={{
-                          color: "warmGray.50",
-                        }}
-                        color="coolGray.800"
-                        alignSelf="flex-start"
-                      >
-                        {item.timeStamp}
-                      </Text>
-                    </HStack>{" "}
+                          {item.nom}
+                        </Heading>
+                    </HStack>
                   </Box>
                 );
               }}

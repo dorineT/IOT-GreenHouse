@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { PlantsScreen } from './Plants';
 import { InfoPlantScreen } from './InfoPlant';
+import { AddPlantScreen } from './AddPlant';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,8 @@ export function IntermediaryScreen({ navigation }) {
             component={PlantsScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="InfoPlante" component={InfoPlantScreen} />
+          <Stack.Screen name="Détails" component={InfoPlantScreen} />
+          <Stack.Screen name="Nouvelle plante" component={AddPlantScreen} />
         </Stack.Navigator>
    );
 }
