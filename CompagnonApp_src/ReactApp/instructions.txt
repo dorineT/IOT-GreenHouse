@@ -1,0 +1,17 @@
+Initialisé avec expo
+- installer à partir du plays store Expo project
+- scanner le code qr fournit par yarn start
+
+-> Utilisation de yarn
+-> nativeBase comme librairie frontend
+
+-> Lancement : yarn start
+-> r (permet de reload en live sur le téléphone)
+
+
+
+_______________________________________
+
+- utilisation de tab navigator
+- pour passer des params d'une page à l'autre, ajout de nested navigation (problème connu avec les tabs navigator)
+- les nested sont des stacks navigator de base
