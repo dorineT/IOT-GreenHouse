@@ -44,13 +44,8 @@ class PlantsFragment : Fragment() {
         _binding = FragmentPlantsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*val textView: TextView = binding.textGallery
-        plantsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+
         binding.fabAddPlant.setOnClickListener { view ->
-            /*Snackbar.make(view, "Add plant", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()*/
 
             Navigation.findNavController(view).navigate(R.id.action_nav_plants_to_addPlantFragment);
         }
