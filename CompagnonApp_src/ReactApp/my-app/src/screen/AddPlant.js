@@ -13,9 +13,12 @@ import {
   Heading,
   AlertDialog,
   Center,
-  Button
+  Button,
+  View
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import SelectableGrid from 'react-native-selectable-grid'
+import { StyleSheet } from "react-native";
 import data from "../../dataPlants.json";
 
 
@@ -27,6 +30,10 @@ export function AddPlantScreen({navigation}) {
   const [selectedItem, setSelectedItem] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
+  const fakeData = [{ label: '1', nom:'vide' }, 
+  { label: '2',nom:'vide' }, { label: '3',nom:'carotte' }, { label: '4',nom:'carotte' }, { label: '5',nom:'carotte' },{ label: '6',nom:'vide' }];
+ 
+
   
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
@@ -51,7 +58,30 @@ export function AddPlantScreen({navigation}) {
           <AlertDialog.Content>
             <AlertDialog.CloseButton />
             <AlertDialog.Header>Ajouter la plante</AlertDialog.Header>
-            <AlertDialog.Body>Vous avez choisi: {selectedItem}</AlertDialog.Body>
+            <AlertDialog.Body>Vous avez choisi: {selectedItem}
+            
+            <View margin={5} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <SelectableGrid    
+                  maxSelect={fakeData.length}
+                  data={fakeData} 
+                 // onSelect={selectedData => alert(selectedData)}
+                  selectedStyle={styles.boxSelected}
+                  unselectedStyle={styles.boxUnselected}
+                  unselectedRender={data => (
+                    <View>
+                      <Text style={{ color: 'gray', fontSize: 20 }}>{data.nom}</Text>
+                    </View>
+                  )}
+
+                  selectedRender={data => (
+                    <View>
+                      <Text style={{ color: 'white', fontSize: 20 }}>{data.nom}</Text>
+                    </View>
+                  )}
+                />
+              </View>
+            
+            </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button.Group space={2}>
                 <Button variant="unstyled" colorScheme="coolGray.200" onPress={onClose} ref={cancelRef}>
@@ -151,3 +181,17 @@ export function AddPlantScreen({navigation}) {
     </Box>
   );
 }
+
+const styles = StyleSheet.create({
+  boxSelected: {
+    backgroundColor: '#a16207'   
+     
+  },
+  boxUnselected: {
+    backgroundColor: 'white',  
+    borderRadius: 20,
+    margin: 3,
+    elevation: 20,
+    shadowColor: '#525252', 
+  },
+});

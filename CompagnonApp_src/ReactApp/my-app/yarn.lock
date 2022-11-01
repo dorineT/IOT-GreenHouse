@@ -5340,7 +5340,7 @@ prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -5448,6 +5448,13 @@ react-native-screens@~3.10.1:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-selectable-grid@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-selectable-grid/-/react-native-selectable-grid-0.3.1.tgz#f0c8a6e1612c93fd82f176be01486e3ebf2628a9"
+  integrity sha512-9HVZwZwQWb4S3HW3fGOusNu1kuVPkzPX4WFNnJ4Oy48t99/o6dzOGjGGwNbtMHeP+OFaOGCP216dkXxKUOC84A==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-svg@12.1.1:
   version "12.1.1"
