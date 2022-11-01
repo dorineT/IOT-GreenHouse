@@ -1,27 +1,28 @@
 import * as React from "react";
 import {
-  Text,
+  View,
   Box,
-  VStack,
   Heading,
   Avatar,
   HStack,
-  Spacer,
   FlatList,
   Pressable,
-  Fab
+  Fab,
 } from "native-base";
 import { Ionicons } from '@expo/vector-icons';
 import data from "../../dataPlants.json";
+import { StyleSheet } from "react-native";
 
 export function PlantsScreen({ navigation }) {
   return (
+    <View style={styles.container}>
+    <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false} shadow={6} 
+     icon={<Ionicons name="ios-add" size={25} color="green" />} 
+     onPress={() => {navigation.navigate('Mes plantes',{
+      screen: 'Nouvelle plante'        
+     })}} />
     <Box>
-      <Fab placement="top-right"  style={{backgroundColor: 'white'}} renderInPortal={false} shadow={6} 
-       icon={<Ionicons name="ios-add" size={25} color="green" />} 
-       onPress={() => {navigation.navigate('Mes plantes',{
-        screen: 'Nouvelle plante'        
-       })}} />
+      
       <FlatList
         data={data}
         renderItem={({ item }) => (
@@ -29,12 +30,10 @@ export function PlantsScreen({ navigation }) {
             _dark={{
               borderColor: "muted.50",
             }}
-            borderColor="muted.800"
-            marginLeft={4}
-            marginRight={4}
-            py={2}
+
+            py={1}
           >
-            <Pressable maxW="96"
+            <Pressable 
                 onPress={() => {navigation.navigate('Mes plantes',{
                     screen: 'Détails',               
                     params: {item: item}
@@ -45,10 +44,8 @@ export function PlantsScreen({ navigation }) {
                   <Box
                     bg={
                       isPressed
-                        ? "coolGray.200"
-                        : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
+                        ? "lime.100"
+                        : "white"
                     }
                     style={{
                       transform: [
@@ -58,7 +55,7 @@ export function PlantsScreen({ navigation }) {
                       ],
                     }}
                     p="5"
-                    rounded="8"
+                    rounded="4"
                     shadow={3}
                     borderWidth="1"
                     borderColor="coolGray.300"
@@ -90,5 +87,18 @@ export function PlantsScreen({ navigation }) {
         keyExtractor={(item) => item.id}
       />
     </Box>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,      
+  },
+  floatinBtn: {
+    
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+  }
+});

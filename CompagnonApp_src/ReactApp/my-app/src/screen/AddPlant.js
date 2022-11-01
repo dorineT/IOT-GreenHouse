@@ -24,6 +24,7 @@ import data from "../../dataPlants.json";
 export function AddPlantScreen({navigation}) {
 
   const [text, setText] = useState('');
+  const [selectedItem, setSelectedItem] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
   
@@ -50,9 +51,10 @@ export function AddPlantScreen({navigation}) {
           <AlertDialog.Content>
             <AlertDialog.CloseButton />
             <AlertDialog.Header>Ajouter la plante</AlertDialog.Header>
+            <AlertDialog.Body>Vous avez choisi: {selectedItem}</AlertDialog.Body>
             <AlertDialog.Footer>
               <Button.Group space={2}>
-                <Button variant="unstyled" colorScheme="coolGray" onPress={onClose} ref={cancelRef}>
+                <Button variant="unstyled" colorScheme="coolGray.200" onPress={onClose} ref={cancelRef}>
                   Annuler
                 </Button>
                 <Button colorScheme="success" onPress={onClose}>
@@ -79,7 +81,7 @@ export function AddPlantScreen({navigation}) {
           onChangeText={(text) => searchFilterFunction(text)}
         />
         </VStack>
-        <Divider/>
+        <Divider mt={4}/>
         <Text>{text}</Text>
         <FlatList 
           data={filteredData}
@@ -89,22 +91,22 @@ export function AddPlantScreen({navigation}) {
               borderColor: "muted.50",
             }}
             borderColor="muted.800"
-            marginLeft={4}
-            marginRight={4}
-            py={2}
+            py={1}
           >
-            <Pressable maxW="96"
-                onPress={() => setIsOpen(!isOpen)}
+            <Pressable
+                onPress={() => {              
+                  setSelectedItem(item.nom)
+                  setIsOpen(!isOpen)
+                }}
+                
             >
               {({ isHovered, isFocused, isPressed }) => {
                 return (
                   <Box
                     bg={
                       isPressed
-                        ? "coolGray.200"
-                        : isHovered
-                        ? "coolGray.200"
-                        : "coolGray.100"
+                        ? "lime.100"
+                        : "white"
                     }
                     style={{
                       transform: [
@@ -114,7 +116,7 @@ export function AddPlantScreen({navigation}) {
                       ],
                     }}
                     p="5"
-                    rounded="8"
+                    rounded="4"
                     shadow={3}
                     borderWidth="1"
                     borderColor="coolGray.300"
