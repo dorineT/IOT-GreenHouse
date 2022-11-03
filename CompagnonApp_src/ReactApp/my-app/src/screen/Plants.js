@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   View,
   Box,
@@ -12,8 +11,45 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import data from "../../dataPlants.json";
 import { StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import * as SQLite from 'expo-sqlite';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+
+
+//const db = openDatabase();
+const db = SQLite.openDatabase('../../assets/www/database.db', 1); // ko ko si 'database.db' => no such table plant
+
+async function openDatabase(){
+  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+  }
+  await FileSystem.downloadAsync(
+    Asset.fromModule(require("../../assets/www/database.db")).uri,
+    FileSystem.documentDirectory + 'SQLite/database.db'
+  );
+  return SQLite.openDatabase('database.db'); // si ça erreur undefinded db.transaction ( .. nearby machin)
+  // see https://github.com/expo/expo/issues/16776
+}
+
+
 
 export function PlantsScreen({ navigation }) {
+  const [plantsList, setPlantsList ] =  useState(null)
+
+  useEffect(() => {    
+    db.transaction(tx => {  
+      console.log("hhh")
+      tx.executeSql('SELECT * FROM plante', null,    
+        (_, { rows: { _array } }) => {
+          console.log('coucou')
+          setPlantsList(_array)
+        },
+        (_, error) => console.log('Error ', error)
+        )
+    })
+  }, []);
+
   return (
     <View style={styles.container}>
     <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false} shadow={6} 
@@ -24,7 +60,7 @@ export function PlantsScreen({ navigation }) {
     <Box>
       
       <FlatList
-        data={data}
+        data={plantsList}
         renderItem={({ item }) => (
           <Box
             _dark={{
