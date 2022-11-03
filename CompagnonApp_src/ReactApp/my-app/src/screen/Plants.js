@@ -13,6 +13,8 @@ import data from "../../dataPlants.json";
 import { StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SQLite from "expo-sqlite";
+//import * as FileSystem from 'expo-file-system';
+//import { Asset } from 'expo-asset';
 
 //bd
 import {getPlantes, createTable} from '../dbHelper/db-service'
@@ -68,18 +70,47 @@ VALUES
 ('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');
 `;
 
-  db.transaction(tx => {  
+ /* db.transaction(tx => {  
         
     tx.executeSql(query1)
     tx.executeSql(query2)
     tx.executeSql(query3)
     tx.executeSql(query4)
-})
+})*/
   console.log("fin creation")
   return db
 }
 
-const db = openDatabase()
+/*async function openDatabase2(){
+  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+  }
+  await FileSystem.downloadAsync(
+    Asset.fromModule(require("../../database.db")).uri,
+    FileSystem.documentDirectory + 'SQLite/database.db'
+  );
+  return SQLite.openDatabase('database.db'); // si ça erreur undefinded db.transaction ( .. nearby machin)
+  // see https://github.com/expo/expo/issues/16776
+}*/
+
+/*async function openDatabaseIShipWithApp() {
+  const internalDbName = "databaseInternal.db"; // Call whatever you want
+  const sqlDir = FileSystem.documentDirectory + "SQLite/";
+  if (!(await FileSystem.getInfoAsync(sqlDir + internalDbName)).exists) {
+      await FileSystem.makeDirectoryAsync(sqlDir, {intermediates: true});
+      const asset = Asset.fromModule(require("../../database.db"));
+      await FileSystem.downloadAsync(asset.uri, sqlDir + internalDbName);
+  }
+  return SQLite.openDatabase(internalDbName);
+}*/
+
+/**async function removeDatabase() {
+    const sqlDir = FileSystem.documentDirectory + "SQLite/";
+    await FileSystem.deleteAsync(sqlDir + "dbInStorage.sqlite", {idempotent: true});
+}*/
+
+
+const db = openDatabaseIShipWithApp()
 
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState(null)
@@ -89,6 +120,7 @@ export function PlantsScreen({ navigation }) {
     /*    getPlantes().then( (result) =>{
     console.log('plus bas')
     setPlantsList(result)*/
+    console.log(db)
     db.transaction((tx) => {
       tx.executeSql(
         'SELECT * FROM plante;', null,    
