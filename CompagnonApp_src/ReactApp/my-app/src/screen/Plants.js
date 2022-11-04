@@ -13,75 +13,14 @@ import data from "../../dataPlants.json";
 import { StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SQLite from "expo-sqlite";
-//import * as FileSystem from 'expo-file-system';
-//import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
 
 //bd
 import {getPlantes, createTable} from '../dbHelper/db-service'
 
 
-function openDatabase() {
-  if (Platform.OS === "web") {
-    return {
-      transaction: () => {
-        return {
-          executeSql: () => {},
-        };
-      },
-    };
-  }
-
-  const db =  SQLite.openDatabase("dbplant.db");
-
-  const query1 = `CREATE TABLE IF NOT EXISTS plante (
-    plante_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nom TEXT NOT NULL,
-    type_plante TEXT NOT NULL,
-    plantation TEXT NOT NULL,
-    recolte TEXT NOT NULL,
-    terre TEXT NOT NULL,
-    eau TEXT NOT NULL,
-    ph TEXT NOT NULL,
-    humidite TEXT NOT NULL,
-    temperature TEXT NOT NULL,
-    description TEXT NOT NULL,
-    image TEXT NOT NULL,
-    lien TEXT
-);`;
-
-const query2 = `CREATE TABLE IF NOT EXISTS serre (
-    id_serre INTEGER PRIMARY KEY,
-    type_action TEXT CHECK( type_action  IN ('arrosage','c_humidite','c_luminosite', 'c_temperature','c_ph') ) NOT NULL,
-    moment datetime default current_timestamp
-);`;
-
-const query3 = `CREATE TABLE IF NOT EXISTS emplacement (
-    label INTEGER PRIMARY KEY AUTOINCREMENT,
-    plante_id  INTEGER  NOT NULL,
-    FOREIGN KEY (plante_id) 
-      REFERENCES plante (plante_id) 
-);`;
-
-
-const query4 = `INSERT INTO plante (nom,type_plante,plantation,recolte,terre,eau,ph,humidite,temperature,image, description)
-VALUES 
-('Basilic','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-('Thym','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');
-`;
-
- /* db.transaction(tx => {  
-        
-    tx.executeSql(query1)
-    tx.executeSql(query2)
-    tx.executeSql(query3)
-    tx.executeSql(query4)
-})*/
-  console.log("fin creation")
-  return db
-}
-
-/*async function openDatabase2(){
+async function openDatabase2(){
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }
@@ -89,20 +28,8 @@ VALUES
     Asset.fromModule(require("../../database.db")).uri,
     FileSystem.documentDirectory + 'SQLite/database.db'
   );
-  return SQLite.openDatabase('database.db'); // si ça erreur undefinded db.transaction ( .. nearby machin)
-  // see https://github.com/expo/expo/issues/16776
-}*/
-
-/*async function openDatabaseIShipWithApp() {
-  const internalDbName = "databaseInternal.db"; // Call whatever you want
-  const sqlDir = FileSystem.documentDirectory + "SQLite/";
-  if (!(await FileSystem.getInfoAsync(sqlDir + internalDbName)).exists) {
-      await FileSystem.makeDirectoryAsync(sqlDir, {intermediates: true});
-      const asset = Asset.fromModule(require("../../database.db"));
-      await FileSystem.downloadAsync(asset.uri, sqlDir + internalDbName);
-  }
-  return SQLite.openDatabase(internalDbName);
-}*/
+  return SQLite.openDatabase('database.db');  
+}
 
 /**async function removeDatabase() {
     const sqlDir = FileSystem.documentDirectory + "SQLite/";
@@ -110,20 +37,20 @@ VALUES
 }*/
 
 
-const db = openDatabaseIShipWithApp()
+const db = SQLite.openDatabase('database.db')
 
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState(null)
 
-
-  useEffect(() => {
+ useEffect(() => {
     /*    getPlantes().then( (result) =>{
     console.log('plus bas')
-    setPlantsList(result)*/
-    console.log(db)
+    setPlantsList(result)
+    console.log(db)*/
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM plante;', null,    
+        `select * from plante p, emplacement e 
+        where p.plante_id = e.plante_id ;`, null,    
         (_, { rows: { _array } }) => setPlantsList(_array),
         (_, error) => console.log('Error ', error)
       );
@@ -200,7 +127,7 @@ export function PlantsScreen({ navigation }) {
             </Pressable>
           </Box>
         )}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.plante.id}
       />
     </Box>
     </View>

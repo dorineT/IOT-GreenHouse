@@ -11,8 +11,30 @@ import { IntermediaryScreen } from './src/screen/intermediary'
 import { HouseScreen } from './src/screen/House';
 import { SettingsScreen } from './src/screen/Setting';
 
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+import * as SQLite from "expo-sqlite";
+
 const Tab = createBottomTabNavigator();
 
+async function openDatabase2(){
+  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+  }
+  await FileSystem.downloadAsync(
+    Asset.fromModule(require("./database.db")).uri,
+    FileSystem.documentDirectory + 'SQLite/database.db'
+  );
+  return SQLite.openDatabase('database.db');  
+}
+
+/**async function removeDatabase() {
+    const sqlDir = FileSystem.documentDirectory + "SQLite/";
+    await FileSystem.deleteAsync(sqlDir + "dbInStorage.sqlite", {idempotent: true});
+}*/
+
+
+const db = openDatabase2()
 
 export default function App() {
   return (

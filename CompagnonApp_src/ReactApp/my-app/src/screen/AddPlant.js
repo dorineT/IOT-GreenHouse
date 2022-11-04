@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   Input, 
@@ -19,19 +19,25 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import SelectableGrid from 'react-native-selectable-grid'
 import { StyleSheet } from "react-native";
-import data from "../../dataPlants.json";
+import * as SQLite from "expo-sqlite";
+//import data from "../../dataPlants.json";
 
 
-
+const db = SQLite.openDatabase('database.db')
 
 export function AddPlantScreen({navigation}) {
 
   const [text, setText] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
+  const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const [emplacementData, setEmplacementData] = useState([]);
+
   const fakeData = [{ label: '1', nom:'vide' }, 
-  { label: '2',nom:'vide' }, { label: '3',nom:'carotte' }, { label: '4',nom:'carotte' }, { label: '5',nom:'carotte' },{ label: '6',nom:'vide' }];
+  { label: '2',nom:'vide' }, { label: '3',nom:'carotte' }, 
+  { label: '4',nom:'carotte' }, { label: '5',nom:'carotte' },{ label: '6',nom:'vide' }];
  
 
   
@@ -51,6 +57,27 @@ export function AddPlantScreen({navigation}) {
       }
   }
 
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from plante p, 
+        where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null,    
+        (_, { rows: { _array } }) => setData(_array),
+        (_, error) => console.log('Error ', error)
+      );
+    });
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select label, p.plante_id, nom from plante p, emplacement e 
+        where
+          p.plante_id = e.plante_id 
+        ;`, null,    
+        (_, { rows: { _array } }) => setEmplacementData(_array),
+        (_, error) => console.log('Error ', error)
+      );
+    });
+   }, []);
+
   const DialogBox = () => {
 
     return <Center>
@@ -63,7 +90,7 @@ export function AddPlantScreen({navigation}) {
             <View margin={5} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <SelectableGrid    
                   maxSelect={fakeData.length}
-                  data={fakeData} 
+                  data={emplacementData} 
                  // onSelect={selectedData => alert(selectedData)}
                   selectedStyle={styles.boxSelected}
                   unselectedStyle={styles.boxUnselected}
@@ -175,7 +202,7 @@ export function AddPlantScreen({navigation}) {
             </Pressable>
           </Box>
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.plante_id}
         />
                
     </Box>
