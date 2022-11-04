@@ -4,6 +4,7 @@ from typing import Callable
 from Phidget22.Phidget import Phidget
 from Phidget22.Devices.LightSensor import LightSensor
 from Phidget22.Devices.TemperatureSensor import TemperatureSensor
+from Phidget22.Devices.HumiditySensor import HumiditySensor
 
 from app.manager.sensors.errors import NotYetAttachedError
 
@@ -11,6 +12,7 @@ from app.manager.sensors.errors import NotYetAttachedError
 class SensorType(Enum):
     LIGHT = 'light'
     TEMP = 'temperature'
+    HUM = 'humidity'
 
 
 class Sensor:
@@ -75,3 +77,13 @@ class cTempSensor(Sensor):
 
     def value(self, max_delay: int) -> float:
         return self._reach(self._sensor.getTemperature, max_delay)
+
+class cHumSensor(Sensor):
+
+    _sensor: HumiditySensor
+
+    def __init__(self, serial_number: int, port: int) -> None:
+        super().__init__(HumiditySensor(), serial_number, port)
+
+    def value(self, max_delay: int) -> float:
+        return self._reach(self._sensor.getHumidity, max_delay)

@@ -4,8 +4,6 @@ from time import time, sleep
 from threading import Thread
 
 from app.manager.GreenHouse import GreenHouse
-from app.manager.sensors.phidgets import SensorType, Sensor
-from app.manager.sensors.phidgets import cLightSensor, cTempSensor
 
 
 class GreenHouseManager(Thread):
@@ -16,17 +14,8 @@ class GreenHouseManager(Thread):
             poll_mindelay: int = 30) -> None:
 
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
-        self.poll_mindelay: int = poll_mindelay * 60
+        self.poll_mindelay: int = poll_mindelay * 6
         self.green_house: GreenHouse = green_house
-
-        self.sensors: dict[SensorType, tuple[Sensor, float | None]] = {
-            SensorType.LIGHT: (
-                cLightSensor(
-                    serial_number=672154, port=0), None),
-            SensorType.TEMP: (
-                cTempSensor(
-                    serial_number=672154, port=2), None)
-        }
 
         super().__init__()
 
