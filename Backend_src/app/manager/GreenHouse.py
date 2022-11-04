@@ -1,5 +1,8 @@
+import logging
+
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime
 
 from Phidget22.PhidgetException import PhidgetException
 
@@ -8,11 +11,13 @@ from app.manager.sensors.phidgets import Sensor, SensorType
 
 @dataclass
 class GreenHouse:
+    logger: logging.Logger
     sensor_millidelay: int
     sensors: list[tuple[SensorType, Sensor, float | None]] = field(default_factory=list)
+    last_watering: datetime | None = None
 
-    @staticmethod
     def _actualize_one(
+            self,
             stype: SensorType,
             sensor: Sensor,
             delay: int) -> float | None:
@@ -30,10 +35,10 @@ class GreenHouse:
         nvalue = None
         try:
             nvalue = sensor.value(delay)
-        except PhidgetException:
-            print(f'{stype.value} sent an error')
+        except PhidgetException as e:
+            self.logger.error(f'{stype.value} sent {e}')
         except NotYetAttachedError:
-            print(f'{stype.value} was not attached')
+            self.logger.error(f'{stype.value} was not attached with {delay=}')
         return nvalue
 
     def actualize_all(self):
@@ -54,10 +59,28 @@ class GreenHouse:
 
         
         self.sensors = [(stype, sensor, nvalue) for (stype, sensor, _), nvalue in zip(self.sensors, values)]
+        self.logger.info(self.get())
     
-    def water(self) -> None:
+    def water(self) -> str | None:
+        """Activates the water pump
+
+        :return: timestamp of last watering
+        :rtype: str | None
+        """
+        self.last_watering = datetime.now()
         # TODO: find a way to start the pump from here
-        print('Watering the green house!')
+        self.logger.info('water pump activated')
+        return self.get_last_watering()
+
+    def get_last_watering(self) -> str | None:
+        """Returns the time of the last watering
+
+        :return: timestamp of last watering
+        :rtype: str | None
+        """
+        if not self.last_watering:
+            return None
+        return self.last_watering.strftime("%H:%M:%S")
 
     def get(self) -> dict[SensorType, float | None]:
         """Converts the sensor data to human readable format

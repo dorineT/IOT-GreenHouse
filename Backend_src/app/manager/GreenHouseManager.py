@@ -54,7 +54,19 @@ class GreenHouseManager(Thread):
         self.green_house.actualize_all()
         return self.green_house.get()
 
-    def water(self) -> None:
+    def activate_watering(self) -> str | None:
         """Activates the water pump of the green house
+
+        :return: timestamp of last watering
+        :rtype: str | None
         """
-        self.green_house.water()
+        # TODO: put in own thread?
+        return self.green_house.water()
+
+    def last_watering(self) -> str | None:
+        """Returns the time of the last watering
+
+        :return: timestamp of last watering
+        :rtype: str | None
+        """
+        return self.green_house.get_last_watering()

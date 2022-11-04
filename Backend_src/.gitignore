@@ -1,0 +1,11 @@
+# Removing python cache
+app/__pycache__/
+app/manager/__pycache__/
+app/manager/sensors/__pycache__/
+
+# Removing mypy cache
+.mypy_cache/
+
+# Removing log files
+app/logs/*.log
+app/logs/*.log.*
