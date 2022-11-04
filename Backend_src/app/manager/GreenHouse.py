@@ -8,13 +8,18 @@ from Phidget22.PhidgetException import PhidgetException
 
 from app.manager.sensors.errors import NotYetAttachedError
 from app.manager.sensors.phidgets import Sensor, SensorType
+from app.manager.sensors.lcd import cLCD
 
 @dataclass
 class GreenHouse:
     logger: logging.Logger
     sensor_millidelay: int
+    lcd_screen: cLCD
     sensors: list[tuple[SensorType, Sensor, float | None]] = field(default_factory=list)
     last_watering: datetime | None = None
+
+    def start_lcd(self):
+        self.lcd_screen.start()
 
     def _actualize_one(
             self,
@@ -61,6 +66,20 @@ class GreenHouse:
         self.sensors = [(stype, sensor, nvalue) for (stype, sensor, _), nvalue in zip(self.sensors, values)]
         self.logger.info(self.get())
     
+    def display(self, message: str) -> None:
+        """Displays a message on the LCD
+
+        :param message: message to display
+        :type message: str
+        """
+        if not self.lcd_screen.is_alive():
+            self.logger.warning(f'sending {message=} to LCD screen but it is unreachable')
+            return
+
+        self.logger.info(f'sending {message=} to LCD screen')
+        self.lcd_screen.queue.put(message)
+
+
     def water(self) -> str | None:
         """Activates the water pump
 

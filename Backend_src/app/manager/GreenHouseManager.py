@@ -5,7 +5,6 @@ from threading import Thread
 
 from app.manager.GreenHouse import GreenHouse
 
-
 class GreenHouseManager(Thread):
 
     def __init__(
@@ -14,7 +13,7 @@ class GreenHouseManager(Thread):
             poll_mindelay: int = 30) -> None:
 
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
-        self.poll_mindelay: int = poll_mindelay * 6 # FIXME: set '* 60'
+        self.poll_mindelay: int = poll_mindelay * 60 # FIXME: set '* 60'
         self.green_house: GreenHouse = green_house
 
         super().__init__()
@@ -30,6 +29,9 @@ class GreenHouseManager(Thread):
 
         # Put here the greenhouse logic here
         self.green_house.actualize_all()
+
+        # TODO: Compute things to display on screen
+        self.green_house.display(str(self.green_house.sensors[0][2]))
 
         # Computing time delay necessary to run cron job
         # exactly poll_mindelay minutes after previous one
