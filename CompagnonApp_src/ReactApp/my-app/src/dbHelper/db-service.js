@@ -59,7 +59,6 @@ export async function getPlantes(){
 
 
 export function addPlantToHouse(plante_id, labels){
-  console.log('plante ' + plante_id)
   labels.forEach(element => {
     db.transaction(tx => {     
       tx.executeSql('UPDATE emplacement set plante_id = ? where label = ?', [plante_id, element.label],
@@ -71,4 +70,16 @@ export function addPlantToHouse(plante_id, labels){
       (txObj, error) => console.log('Error ', error))      
     })
   });
+}
+
+export function deletePlantFromHouse(plante_id){  
+    db.transaction(tx => {     
+      tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?', [plante_id],
+      (txObj, resultSet) => { 
+        if(resultSet.rowsAffected > 0){
+          console.log('update ok')
+        }
+      },
+      (txObj, error) => console.log('Error ', error))      
+    })
 }

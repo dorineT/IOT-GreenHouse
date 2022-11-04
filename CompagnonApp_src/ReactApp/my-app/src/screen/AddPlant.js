@@ -53,11 +53,9 @@ export function AddPlantScreen({navigation}) {
     console.log('add to bd')
     //get les selectCase
     // add  bd  
-    addPlantToHouse(selectedItem_id, this.sbRef.selectedData())
-    
+    addPlantToHouse(selectedItem_id, this.sbRef.selectedData())    
     onClose()
-    //updateData()
-    
+    updateData()    
   }
 
   const searchFilterFunction = (text) => {
@@ -75,6 +73,7 @@ export function AddPlantScreen({navigation}) {
 
 
   function updateData(){
+    console.log('refresh')
     db.transaction((tx) => {
       tx.executeSql(
         `select * from plante p
@@ -176,6 +175,7 @@ export function AddPlantScreen({navigation}) {
         <Text>{text}</Text>
         <FlatList 
           data={filteredData}
+          extraData={filteredData}
           renderItem={({item}) =>(
             <Box
             _dark={{

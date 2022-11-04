@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import { 
+  View,
   Text, 
   Container,
   Heading,
@@ -14,16 +15,31 @@ Icon,
 Divider
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { TabView, SceneMap } from 'react-native-tab-view';
+import {deletePlantFromHouse} from '../dbHelper/db-service'
 
 
-
-
-export function InfoPlantScreen({route}) {
+export function InfoPlantScreen({route, navigation}) {
   const plante = route.params.item;
+
+  function deletePlant(){
+    deletePlantFromHouse(plante.plante_id).then( () => {
+      navigation.navigate('Détails',{
+        screen: 'Mes plantes'        
+       })
+    })
+  }
+
+  
   return (
     <ScrollView>
       <Box padding={7} margin={5} rounded="xl"  bg={["white"]} >
-        <Heading>{plante.nom}</Heading>
+        
+          <HStack  justifyContent="space-between">  
+          <Heading> {plante.nom}</Heading>
+          <Icon  size="8" color="warning.600" as={<Ionicons name="ios-trash" />} onPress={() =>deletePlant()}/>
+          </HStack>
+          
         <Text fontSize="md" italic>{plante.type}</Text>
         <VStack>
           <Center>
@@ -31,7 +47,8 @@ export function InfoPlantScreen({route}) {
               uri: plante.image
             }} alt="Alternate Text" size="xl" />
           </Center>
-
+          <Divider mt={5} mb={5}></Divider>
+          
           <Text>{plante.description}</Text>
         
         <Divider mt={5}></Divider>
@@ -70,6 +87,7 @@ export function InfoPlantScreen({route}) {
             <Ionicons name="ios-calendar-outline" size={34} color="grey" />
             <Text>Période de récolte: {plante.recolte}</Text>
           </HStack>
+
 
         </VStack>
       </Box>
