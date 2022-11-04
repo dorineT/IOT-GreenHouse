@@ -40,7 +40,7 @@ export function PlantsScreen({ navigation }) {
     console.log(db)*/
     db.transaction((tx) => {
       tx.executeSql(
-        `select p.* from plante p, emplacement e 
+        `select distinct p.* from plante p, emplacement e 
         where p.plante_id = e.plante_id ;`, null,    
         (_, { rows: { _array } }) => setPlantsList(_array),
         (_, error) => console.log('Error ', error)
