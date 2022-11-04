@@ -18,6 +18,8 @@ class GreenHouseManager(Thread):
 
         super().__init__()
 
+        self.daemon = True
+
     def _cron_job(self) -> None:
         """Fetches the sensor values from the phidget and
         computes the green house current state.
@@ -56,19 +58,15 @@ class GreenHouseManager(Thread):
         self.green_house.actualize_all()
         return self.green_house.get()
 
-    def activate_watering(self) -> str | None:
-        """Activates the water pump of the green house
+    def handle_watering(self, type: str = 'get') -> str | None:
+        """Handles the water pump of the green house
 
+        :param type: type of request: 'get', 'post'
+        :type type: str
         :return: timestamp of last watering
         :rtype: str | None
         """
-        # TODO: put in own thread?
-        return self.green_house.water()
-
-    def last_watering(self) -> str | None:
-        """Returns the time of the last watering
-
-        :return: timestamp of last watering
-        :rtype: str | None
-        """
-        return self.green_house.get_last_watering()
+        match type:
+            case 'get': return self.green_house.get_last_watering()
+            case 'post': return self.green_house.water() # TODO: put in own thread?
+            case _: return self.green_house.get_last_watering()

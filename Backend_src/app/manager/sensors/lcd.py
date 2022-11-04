@@ -28,6 +28,21 @@ class cLCD(Thread):
         self._port = port
         self._timeout = timeout
 
+    def handle_message(self, message: str) -> None:
+        """Displays a given message to the screen
+
+        :param message: message to display
+        :type message: str
+        """
+
+        self._screen.clear()
+
+        self._screen.writeText(
+            LCDFont.FONT_6x12, 0, 10,
+            message)
+        
+        self._screen.flush()
+
     def run(self) -> None:
 
         try:
@@ -46,15 +61,8 @@ class cLCD(Thread):
 
             if message == EXIT_COMMAND:
                 break
-
-            self._screen.clear()
-            self._screen.flush()
-
-            self._screen.writeText(
-                LCDFont.FONT_6x12, 0, 10,
-                message)
             
-            self._screen.flush()
+            self.handle_message(message)
 
         self._screen.close()
 
