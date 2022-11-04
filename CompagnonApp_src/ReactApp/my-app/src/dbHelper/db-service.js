@@ -72,7 +72,7 @@ export function addPlantToHouse(plante_id, labels){
   });
 }
 
-export function deletePlantFromHouse(plante_id){  
+export async function deletePlantFromHouse(plante_id){  
     db.transaction(tx => {     
       tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?', [plante_id],
       (txObj, resultSet) => { 

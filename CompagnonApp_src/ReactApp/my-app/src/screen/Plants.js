@@ -13,8 +13,6 @@ import data from "../../dataPlants.json";
 import { StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SQLite from "expo-sqlite";
-import * as FileSystem from 'expo-file-system';
-import { Asset } from 'expo-asset';
 
 //bd
 import {getPlantes, createTable} from '../dbHelper/db-service'
