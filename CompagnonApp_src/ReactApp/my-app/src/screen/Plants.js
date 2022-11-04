@@ -20,29 +20,22 @@ import { Asset } from 'expo-asset';
 import {getPlantes, createTable} from '../dbHelper/db-service'
 
 
-async function openDatabase2(){
-  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-  }
-  await FileSystem.downloadAsync(
-    Asset.fromModule(require("../../database.db")).uri,
-    FileSystem.documentDirectory + 'SQLite/database.db'
-  );
-  return SQLite.openDatabase('database.db');  
-}
-
-/**async function removeDatabase() {
-    const sqlDir = FileSystem.documentDirectory + "SQLite/";
-    await FileSystem.deleteAsync(sqlDir + "dbInStorage.sqlite", {idempotent: true});
-}*/
-
-
 const db = SQLite.openDatabase('database.db')
 
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState(null)
 
  useEffect(() => {
+    fetchData();
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      fetchData();
+    });
+
+  return willFocusSubscription;
+
+  }, []);
+
+  function fetchData(){
     /*    getPlantes().then( (result) =>{
     console.log('plus bas')
     setPlantsList(result)
@@ -55,7 +48,7 @@ export function PlantsScreen({ navigation }) {
         (_, error) => console.log('Error ', error)
       );
     });
-  }, []);
+  }
 
   return (
     <View style={styles.container}>
@@ -127,7 +120,7 @@ export function PlantsScreen({ navigation }) {
             </Pressable>
           </Box>
         )}
-        keyExtractor={(item) => item.plante.id}
+        keyExtractor={(item) => item.plante_id}
       />
     </Box>
     </View>

@@ -22,6 +22,8 @@ import { StyleSheet } from "react-native";
 import * as SQLite from "expo-sqlite";
 //import data from "../../dataPlants.json";
 
+//bd
+import {addPlantToHouse} from '../dbHelper/db-service'
 
 const db = SQLite.openDatabase('database.db')
 
@@ -29,6 +31,8 @@ export function AddPlantScreen({navigation}) {
 
   const [text, setText] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
+  const [selectedItem_id, setSelectedItem_id] = useState('');
+
   const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -44,6 +48,18 @@ export function AddPlantScreen({navigation}) {
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
 
+
+  function addPlantToDB(){
+    console.log('add to bd')
+    //get les selectCase
+    // add  bd  
+    addPlantToHouse(selectedItem_id, this.sbRef.selectedData())
+    
+    onClose()
+    //updateData()
+    
+  }
+
   const searchFilterFunction = (text) => {
       if(text){  
           const newData = data.filter(item => {
@@ -57,7 +73,8 @@ export function AddPlantScreen({navigation}) {
       }
   }
 
-  useEffect(() => {
+
+  function updateData(){
     db.transaction((tx) => {
       tx.executeSql(
         `select * from plante p
@@ -74,34 +91,53 @@ export function AddPlantScreen({navigation}) {
         (_, error) => console.log('Error ', error)
       );
     });
+  }
+
+  useEffect(() => {
+    updateData()
    }, []);
 
   const DialogBox = () => {
-
     return <Center>
         <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
           <AlertDialog.Content>
             <AlertDialog.CloseButton />
-            <AlertDialog.Header>Ajouter la plante</AlertDialog.Header>
-            <AlertDialog.Body>Vous avez choisi: {selectedItem}
+            <AlertDialog.Header style={styles.dialogBox}>Choisissez l'emplacement</AlertDialog.Header>
+            <AlertDialog.Body> <HStack><Text>Vous avez choisi: {selectedItem}</Text></HStack>
             
             <View margin={5} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <SelectableGrid    
+                <SelectableGrid 
+                  ref={(ref) => {
+                    this.sbRef = ref;
+                  }}   
                   maxSelect={fakeData.length}
                   data={emplacementData} 
                  // onSelect={selectedData => alert(selectedData)}
                   selectedStyle={styles.boxSelected}
                   unselectedStyle={styles.boxUnselected}
-                  unselectedRender={data => (
+                  unselectedRender={data => (                    
+                    data.nom === null ?
                     <View>
-                      <Text style={{ color: 'gray', fontSize: 20 }}>{data.nom}</Text>
+                      <Text style={{ color: 'gray', fontSize: 20 }}>                                          
+                        vide                    
+                      </Text>
                     </View>
+                    :
+                    <View>
+                    <Text style={{ color: 'gray', fontSize: 20 }}>                                          
+                      {data.nom}                   
+                    </Text>
+                  </View>
                   )}
-
                   selectedRender={data => (
+                    data.nom !== null ?
                     <View>
                       <Text style={{ color: 'white', fontSize: 20 }}>{data.nom}</Text>
                     </View>
+                    :
+                    <View>
+                    <Text style={{ color: 'white', fontSize: 20 }}>{selectedItem}</Text>
+                  </View>
                   )}
                 />
               </View>
@@ -112,7 +148,7 @@ export function AddPlantScreen({navigation}) {
                 <Button variant="unstyled" colorScheme="coolGray.200" onPress={onClose} ref={cancelRef}>
                   Annuler
                 </Button>
-                <Button colorScheme="success" onPress={onClose}>
+                <Button variant="outline" colorScheme="lime" onPress={() => addPlantToDB()}>
                   Ajouter
                 </Button>
               </Button.Group>
@@ -151,6 +187,7 @@ export function AddPlantScreen({navigation}) {
             <Pressable
                 onPress={() => {              
                   setSelectedItem(item.nom)
+                  setSelectedItem_id(item.plante_id)
                   setIsOpen(!isOpen)
                 }}
                 
@@ -208,6 +245,10 @@ export function AddPlantScreen({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  dialogBox: {
+    backgroundColor: '#84cc16'    
+  },
+
   boxSelected: {
     backgroundColor: '#a16207'   
      

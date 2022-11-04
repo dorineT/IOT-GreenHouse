@@ -1,18 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-export async function openDatabase() {
-    if (Platform.OS === "web") {
-      return {
-        transaction: () => {
-          return {
-            executeSql: () => {},
-          };
-        },
-      };
-    }
-  
-    return SQLite.openDatabase("database.db");
-}
+const db = SQLite.openDatabase('database.db')
 
 export async function createTable(){
     // create table if not exists
@@ -66,15 +54,21 @@ export async function createTable(){
 
 
 export async function getPlantes(){
-    const db = await openDatabase()
-    db.transaction(tx => {  
-        console.log("coucou")        
-        tx.executeSql('SELECT * FROM plante;', null,    
-          (_, { rows: { _array } }) => {
-            console.log(_array)
-            return _array
-        },
-          (_, error) => console.log('Error ', error)
-          )
-      })
+//take from plants.js
+}
+
+
+export function addPlantToHouse(plante_id, labels){
+  console.log('plante ' + plante_id)
+  labels.forEach(element => {
+    db.transaction(tx => {     
+      tx.executeSql('UPDATE emplacement set plante_id = ? where label = ?', [plante_id, element.label],
+      (txObj, resultSet) => { 
+        if(resultSet.rowsAffected > 0){
+          console.log('update ok')
+        }
+      },
+      (txObj, error) => console.log('Error ', error))      
+    })
+  });
 }
