@@ -54,3 +54,16 @@ class GreenHouse:
 
         
         self.sensors = [(stype, sensor, nvalue) for (stype, sensor, _), nvalue in zip(self.sensors, values)]
+    
+    def water(self) -> None:
+        # TODO: find a way to start the pump from here
+        print('Watering the green house!')
+
+    def get(self) -> dict[SensorType, float | None]:
+        """Converts the sensor data to human readable format
+
+        :return: human readable values from sensors
+        :rtype: dict[SensorType, float | None]
+        """
+
+        return {stype.value: val for stype, _, val in self.sensors}

@@ -14,7 +14,7 @@ class GreenHouseManager(Thread):
             poll_mindelay: int = 30) -> None:
 
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
-        self.poll_mindelay: int = poll_mindelay * 6
+        self.poll_mindelay: int = poll_mindelay * 6 # FIXME: set '* 60'
         self.green_house: GreenHouse = green_house
 
         super().__init__()
@@ -52,5 +52,9 @@ class GreenHouseManager(Thread):
         :rtype: dict[str, float | None]
         """
         self.green_house.actualize_all()
-        return {stype.value: value
-                for stype, _, value in self.green_house.sensors}
+        return self.green_house.get()
+
+    def water(self) -> None:
+        """Activates the water pump of the green house
+        """
+        self.green_house.water()
