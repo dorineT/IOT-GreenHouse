@@ -60,7 +60,7 @@ export function AddPlantScreen({navigation}) {
   useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        `select * from plante p, 
+        `select * from plante p
         where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null,    
         (_, { rows: { _array } }) => setData(_array),
         (_, error) => console.log('Error ', error)
@@ -68,10 +68,8 @@ export function AddPlantScreen({navigation}) {
     });
     db.transaction((tx) => {
       tx.executeSql(
-        `select label, p.plante_id, nom from plante p, emplacement e 
-        where
-          p.plante_id = e.plante_id 
-        ;`, null,    
+        `select e.*, p.nom from emplacement e
+        left join plante p on e.plante_id = p.plante_id;`, null,    
         (_, { rows: { _array } }) => setEmplacementData(_array),
         (_, error) => console.log('Error ', error)
       );
