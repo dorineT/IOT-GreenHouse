@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { 
   View,
   Text, 
@@ -10,21 +10,44 @@ import {
   HStack,
   ScrollView,
 Icon,
-Divider
+Divider,
+useColorModeValue,
+Pressable
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Animated, TouchableOpacity,StatusBar } from "react-native";
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {deletePlantFromHouse} from '../dbHelper/db-service'
+import * as SQLite from "expo-sqlite";
+import SelectableGrid from 'react-native-selectable-grid'
+
+const db = SQLite.openDatabase('database.db')
 
 
 export function InfoPlantScreen({route, navigation})  {
   const plante = route.params.item;
 
+  const [emplacementData, setEmplacementData] = useState([]);
+
   async function deletePlant(){
     await deletePlantFromHouse(plante.plante_id)
     navigation.navigate('Détails',{ screen: 'Mes plantes'})    
   }
+
+  function updateData(){
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select e.*, p.nom from emplacement e
+        left join plante p on e.plante_id = p.plante_id;`, null,    
+        (_, { rows: { _array } }) => setEmplacementData(_array),
+        (_, error) => console.log('Error ', error)
+      );
+    });
+  }
+
+  useEffect(() => {
+    updateData()
+   }, []);
 
   const FirstRoute = () => (
     <ScrollView>
@@ -90,15 +113,47 @@ export function InfoPlantScreen({route, navigation})  {
   );
 
   const SecondRoute = () => (
-    <View style={[styles.scene, { backgroundColor: '#673ab7' }]} />
+    <ScrollView > 
+    <SelectableGrid 
+      maxSelect={emplacementData.length}
+      data={emplacementData} 
+     // onSelect={selectedData => alert(selectedData)}
+      selectedStyle={styles.boxSelected}
+      unselectedStyle={styles.boxUnselected}
+      unselectedRender={data => (                    
+        data.nom === null ?
+        <View>
+          <Text style={{ color: 'gray', fontSize: 20 }}>                                          
+            vide                    
+          </Text>
+        </View>
+        :
+        <View>
+        <Text style={{ color: 'gray', fontSize: 20 }}>                                          
+          {data.nom}                   
+        </Text>
+      </View>
+      )}
+      selectedRender={data => (
+        data.nom !== null ?
+        <View>
+          <Text style={{ color: 'white', fontSize: 20 }}>{data.nom}</Text>
+        </View>
+        :
+        <View>
+        <Text style={{ color: 'white', fontSize: 20 }}>{selectedItem}</Text>
+      </View>
+      )}
+    />
+  </ScrollView>
   );
 
   const initialLayout = { width: Dimensions.get('window').width };
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'first', title: 'First' },
-    { key: 'second', title: 'Second' },
+    { key: 'first', title: "Ma plante"},
+    { key: 'second', title: 'Emplacement' },
   ]);
 
   const renderScene = SceneMap({
@@ -106,11 +161,35 @@ export function InfoPlantScreen({route, navigation})  {
     second: SecondRoute,
   });
 
+  const renderTabBar = props => {
+    const inputRange = props.navigationState.routes.map((x, i) => i);
+    return <Box flexDirection="row">
+        {props.navigationState.routes.map((route, i) => {
+        const opacity = props.position.interpolate({
+          inputRange,
+          outputRange: inputRange.map(inputIndex => inputIndex === i ? 1 : 0.5)
+        });
+        const color = index === i ? useColorModeValue('#000', '#e5e5e5') : useColorModeValue('#1f2937', '#a1a1aa');
+        const borderColor = index === i ? 'cyan.500' : useColorModeValue('coolGray.200', 'gray.400');
+        return <Box borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
+              <Pressable onPress={() => {          
+            setIndex(i);
+          }}>
+                <Animated.Text style={{
+              color
+            }}>{route.title}</Animated.Text>
+              </Pressable>
+            </Box>;
+      })}
+      </Box>;
+  };
+
   return (   
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
+        renderTabBar={renderTabBar}
         initialLayout={initialLayout}
       />    
   );
@@ -120,4 +199,16 @@ const styles = StyleSheet.create({
   scene: {
     flex: 1,
   },
+  boxSelected: {
+    backgroundColor: '#a16207'   
+     
+  },
+  boxUnselected: {
+    backgroundColor: 'white',  
+    borderRadius: 20,
+    margin: 3,
+    elevation: 20,
+    shadowColor: '#525252', 
+  },
 });
+

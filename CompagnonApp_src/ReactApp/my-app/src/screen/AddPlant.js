@@ -14,7 +14,8 @@ import {
   AlertDialog,
   Center,
   Button,
-  View
+  View,
+  useToast
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import SelectableGrid from 'react-native-selectable-grid'
@@ -38,24 +39,25 @@ export function AddPlantScreen({navigation}) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [emplacementData, setEmplacementData] = useState([]);
-
-  const fakeData = [{ label: '1', nom:'vide' }, 
-  { label: '2',nom:'vide' }, { label: '3',nom:'carotte' }, 
-  { label: '4',nom:'carotte' }, { label: '5',nom:'carotte' },{ label: '6',nom:'vide' }];
- 
-
   
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
+  const toast = useToast();
+  let sbRef = null
 
-
-  function addPlantToDB(){
-    console.log('add to bd')
+  function addPlantToDB(){  
     //get les selectCase
     // add  bd  
-    addPlantToHouse(selectedItem_id, this.sbRef.selectedData())    
+    addPlantToHouse(selectedItem_id, sbRef.selectedData())    
     onClose()
     updateData()    
+    toast.show({
+      render: () => {
+        return <Box bg="#a16207" opacity="75" px="2" py="1" rounded="sm" mb={5}>
+                <Text color="white">Plante ajoutée à votre liste</Text> 
+              </Box>;
+      }
+    });
   }
 
   const searchFilterFunction = (text) => {
@@ -72,13 +74,16 @@ export function AddPlantScreen({navigation}) {
   }
 
 
-  function updateData(){
-    console.log('refresh')
+  function updateData(){ 
     db.transaction((tx) => {
       tx.executeSql(
         `select * from plante p
         where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null,    
-        (_, { rows: { _array } }) => setData(_array),
+        (_, { rows: { _array } }) => {
+          setData(_array);
+          setFilteredData([]);
+          setText('');
+        } ,
         (_, error) => console.log('Error ', error)
       );
     });
@@ -107,9 +112,9 @@ export function AddPlantScreen({navigation}) {
             <View margin={5} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <SelectableGrid 
                   ref={(ref) => {
-                    this.sbRef = ref;
+                    sbRef = ref;
                   }}   
-                  maxSelect={fakeData.length}
+                  maxSelect={emplacementData.length}
                   data={emplacementData} 
                  // onSelect={selectedData => alert(selectedData)}
                   selectedStyle={styles.boxSelected}
