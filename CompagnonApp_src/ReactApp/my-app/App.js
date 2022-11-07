@@ -14,6 +14,7 @@ import { SettingsScreen } from './src/screen/Setting';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import * as SQLite from "expo-sqlite";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,9 +37,15 @@ async function openDatabase2(){
 
 const db = openDatabase2()
 
+const config = {
+  dependencies: {
+    'linear-gradient': LinearGradient
+  }
+};
+
 export default function App() {
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider config={config}>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({route})=> ({
