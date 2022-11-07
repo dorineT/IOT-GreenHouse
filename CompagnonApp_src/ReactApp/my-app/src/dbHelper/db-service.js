@@ -73,13 +73,11 @@ export function addPlantToHouse(plante_id, labels){
 }
 
 export async function deletePlantFromHouse(plante_id){  
+  return new Promise((resolve, reject) =>{
     db.transaction(tx => {     
       tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?', [plante_id],
-      (txObj, resultSet) => { 
-        if(resultSet.rowsAffected > 0){
-          console.log('update ok')
-        }
-      },
-      (txObj, error) => console.log('Error ', error))      
+      (txObj, resultSet) => resolve(resultSet.rowsAffected),
+      (txObj, error) => reject(error))      
     })
+  })
 }

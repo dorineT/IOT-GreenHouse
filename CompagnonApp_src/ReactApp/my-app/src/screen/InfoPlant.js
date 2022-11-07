@@ -12,7 +12,8 @@ import {
 Icon,
 Divider,
 useColorModeValue,
-Pressable
+Pressable,
+useToast
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Dimensions, Animated, TouchableOpacity,StatusBar } from "react-native";
@@ -26,12 +27,22 @@ const db = SQLite.openDatabase('database.db')
 
 export function InfoPlantScreen({route, navigation})  {
   const plante = route.params.item;
-
+  const toast = useToast();
   const [emplacementData, setEmplacementData] = useState([]);
 
-  async function deletePlant(){
-    await deletePlantFromHouse(plante.plante_id)
-    navigation.navigate('Détails',{ screen: 'Mes plantes'})    
+  function deletePlant(){
+    deletePlantFromHouse(plante.plante_id).then(result =>{
+      if(result > 0){
+        toast.show({
+          render: () => {
+            return <Box bg="#a16207" opacity="75" px="2" py="1" rounded="sm" mb={5}>
+                    <Text color="white">Plante supprimée</Text> 
+                  </Box>;
+          }
+        });
+        navigation.goBack()
+      }
+    })    
   }
 
   function updateData(){
@@ -114,31 +125,25 @@ export function InfoPlantScreen({route, navigation})  {
 
   const SecondRoute = () => (
     
-      <FlatGrid        
+      <FlatGrid                
         itemDimension={100}
         data={emplacementData}
-        //style={styles.gridView}
-        spacing={10}
+        style={styles.gridView}
+        spacing={20}
         maxItemsPerRow={2}
         renderItem={({ item }) => {
           if(item.nom === null){
             return(
-              <Center  rounded="lg" padding={7}  bg="warmGray.300" _text={{
-                fontSize: 'lg',
-                fontWeight: 'medium',
-                color: 'white',
-                textAlign: 'center'
-              }}>Vide </Center> 
+              <View style={[styles.itemContainer]}  bg="warmGray.300" >
+              <Text style={styles.itemName}>Vide</Text>
+            </View>
             )
           }
           else{
             return(
-              <Center  rounded="lg" padding={7} bg="#a16207" _text={{
-                fontSize: 'lg',
-                fontWeight: 'medium',
-                color: 'warmGray.50',
-                textAlign: 'center'
-              }}>{item.nom} </Center> 
+              <View style={[styles.itemContainer, { backgroundColor: "#a16207" }]}>
+              <Text style={styles.itemName}>{item.nom}</Text>
+            </View>
             )
           }
         }}
@@ -169,7 +174,7 @@ export function InfoPlantScreen({route, navigation})  {
         });
         const color = index === i ? useColorModeValue('#000', '#e5e5e5') : useColorModeValue('#1f2937', '#a1a1aa');
         const borderColor = index === i ? '#a16207' : useColorModeValue('coolGray.200', 'gray.400');
-        return <Box borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
+        return <Box key={i} borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
               <Pressable onPress={() => {          
             setIndex(i);
           }}>
@@ -194,8 +199,23 @@ export function InfoPlantScreen({route, navigation})  {
 }
 
 const styles = StyleSheet.create({
-  scene: {
-    flex: 1,
+  gridView: {
+    marginTop: 10,
+    flex: 1,    
+  },
+  itemContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    height: 150,
+    elevation: 20,
+    shadowColor: '#525252', 
+  },
+  itemName: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: '600',
   },
 });
 
