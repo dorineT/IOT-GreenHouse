@@ -19,7 +19,7 @@ import { StyleSheet, Dimensions, Animated, TouchableOpacity,StatusBar } from "re
 import { TabView, SceneMap } from 'react-native-tab-view';
 import {deletePlantFromHouse} from '../dbHelper/db-service'
 import * as SQLite from "expo-sqlite";
-import SelectableGrid from 'react-native-selectable-grid'
+import { FlatGrid } from 'react-native-super-grid';
 
 const db = SQLite.openDatabase('database.db')
 
@@ -113,39 +113,37 @@ export function InfoPlantScreen({route, navigation})  {
   );
 
   const SecondRoute = () => (
-    <ScrollView > 
-    <SelectableGrid 
-      maxSelect={emplacementData.length}
-      data={emplacementData} 
-     // onSelect={selectedData => alert(selectedData)}
-      selectedStyle={styles.boxSelected}
-      unselectedStyle={styles.boxUnselected}
-      unselectedRender={data => (                    
-        data.nom === null ?
-        <View>
-          <Text style={{ color: 'gray', fontSize: 20 }}>                                          
-            vide                    
-          </Text>
-        </View>
-        :
-        <View>
-        <Text style={{ color: 'gray', fontSize: 20 }}>                                          
-          {data.nom}                   
-        </Text>
-      </View>
-      )}
-      selectedRender={data => (
-        data.nom !== null ?
-        <View>
-          <Text style={{ color: 'white', fontSize: 20 }}>{data.nom}</Text>
-        </View>
-        :
-        <View>
-        <Text style={{ color: 'white', fontSize: 20 }}>{selectedItem}</Text>
-      </View>
-      )}
-    />
-  </ScrollView>
+    
+      <FlatGrid        
+        itemDimension={100}
+        data={emplacementData}
+        //style={styles.gridView}
+        spacing={10}
+        maxItemsPerRow={2}
+        renderItem={({ item }) => {
+          if(item.nom === null){
+            return(
+              <Center  rounded="lg" padding={7}  bg="warmGray.300" _text={{
+                fontSize: 'lg',
+                fontWeight: 'medium',
+                color: 'white',
+                textAlign: 'center'
+              }}>Vide </Center> 
+            )
+          }
+          else{
+            return(
+              <Center  rounded="lg" padding={7} bg="#a16207" _text={{
+                fontSize: 'lg',
+                fontWeight: 'medium',
+                color: 'warmGray.50',
+                textAlign: 'center'
+              }}>{item.nom} </Center> 
+            )
+          }
+        }}
+      />
+
   );
 
   const initialLayout = { width: Dimensions.get('window').width };
@@ -170,7 +168,7 @@ export function InfoPlantScreen({route, navigation})  {
           outputRange: inputRange.map(inputIndex => inputIndex === i ? 1 : 0.5)
         });
         const color = index === i ? useColorModeValue('#000', '#e5e5e5') : useColorModeValue('#1f2937', '#a1a1aa');
-        const borderColor = index === i ? 'cyan.500' : useColorModeValue('coolGray.200', 'gray.400');
+        const borderColor = index === i ? '#a16207' : useColorModeValue('coolGray.200', 'gray.400');
         return <Box borderBottomWidth="3" borderColor={borderColor} flex={1} alignItems="center" p="3" cursor="pointer">
               <Pressable onPress={() => {          
             setIndex(i);
@@ -198,17 +196,6 @@ export function InfoPlantScreen({route, navigation})  {
 const styles = StyleSheet.create({
   scene: {
     flex: 1,
-  },
-  boxSelected: {
-    backgroundColor: '#a16207'   
-     
-  },
-  boxUnselected: {
-    backgroundColor: 'white',  
-    borderRadius: 20,
-    margin: 3,
-    elevation: 20,
-    shadowColor: '#525252', 
   },
 });
 
