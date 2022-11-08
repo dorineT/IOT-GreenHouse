@@ -98,7 +98,6 @@ class cCO2Sensor(Sensor):
         noise = PerlinNoise(octaves=10, seed=1)
         self.mean = 650
         self.noise_map = [self.mean + self.mean*noise(i/100) for i in range(100)]
-        print(self.noise_map)
         self.cidx = -1
         self.cdir = 1
         
@@ -118,7 +117,6 @@ class cPHSensor(Sensor):
         noise = PerlinNoise(octaves=10, seed=2)
         self.mean = 7
         self.noise_map = [self.mean + self.mean*0.2*noise(i/100) for i in range(100)]
-        print(self.noise_map)
         self.cidx = -1
         self.cdir = 1
         
