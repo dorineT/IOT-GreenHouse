@@ -9,6 +9,7 @@ flask = "*"
 flask-restful = "*"
 gunicorn = "*"
 colorama = "*"
+perlin-noise = "*"
 
 [dev-packages]
 
