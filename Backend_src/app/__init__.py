@@ -6,7 +6,7 @@ from app.loggers import green_house_logger, request_logger
 from app.manager.GreenHouse import GreenHouse
 from app.manager.GreenHouseManager import GreenHouseManager
 from app.manager.sensors.phidgets import SensorType
-from app.manager.sensors.phidgets import cTempSensor, cLightSensor, cHumSensor
+from app.manager.sensors.phidgets import cTempSensor, cLightSensor, cHumSensor, cCO2Sensor, cPHSensor
 from app.manager.sensors.lcd import cLCD
 
 app = Flask(__name__)
@@ -28,6 +28,8 @@ green_house = GreenHouse(
         (SensorType.LIGHT, cLightSensor(serial_number=phub_serial_number, port=0), None),
         (SensorType.HUM, cHumSensor(serial_number=phub_serial_number, port=1), None),
         (SensorType.TEMP, cTempSensor(serial_number=phub_serial_number, port=2), None),
+        (SensorType.CO2, cCO2Sensor(serial_number=phub_serial_number, port=3), None),
+        (SensorType.PH, cPHSensor(serial_number=phub_serial_number, port=4), None),
     ])
 
 # Gree house manager
