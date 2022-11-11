@@ -15,7 +15,7 @@ This webserver uses pipenv to manage its virtual environment. To install it, exe
 pip install pipenv
 ```
 
-The, to download the dependencies automaticaly, execute the following command:
+Then to download the dependencies automaticaly, execute the following command:
 
 ```bash
 pipenv install
@@ -23,7 +23,7 @@ pipenv install
 
 ### Drivers
 
-From [this page](https://www.phidgets.com/docs/Language_-_Python), install the Linux (?) drivers on the Raspberry. If you are on another platform, install the drivers accodingly.
+From [this page](https://www.phidgets.com/docs/Language_-_Python), install the Linux (?) drivers on the Raspberry. If you are on another platform, install the drivers accordingly.
 
 ## Launch the webserver
 
@@ -37,7 +37,7 @@ Then, for example, curl at **<http://localhost:5000/poll>**
 
 **In Production mode**: do no use flask but rather gunicorn and nginx (work for later)
 
-gunicorn command (WiP):
+gunicorn command (WiP - does not work on Windows):
 
 ```bash
 gunicorn --bind 0.0.0.0:5000 wsgi:app
