@@ -40,4 +40,5 @@ green_house_manager.green_house.start_lcd()
 # Request
 requests_logger = request_logger()
 
+# Must put routes at the end
 from app import routes

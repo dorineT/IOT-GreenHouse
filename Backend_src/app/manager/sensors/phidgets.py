@@ -82,6 +82,7 @@ class cTempSensor(Sensor):
     def value(self, max_delay: int) -> float:
         return self._reach(self._sensor.getTemperature, max_delay)
 
+
 class cHumSensor(Sensor):
 
     _sensor: HumiditySensor
@@ -92,41 +93,46 @@ class cHumSensor(Sensor):
     def value(self, max_delay: int) -> float:
         return self._reach(self._sensor.getHumidity, max_delay)
 
+
 class cCO2Sensor(Sensor):
-    
+
     def __init__(self, serial_number: int, port: int) -> None:
         noise = PerlinNoise(octaves=10, seed=1)
-        self.mean = 650
-        self.noise_map = [self.mean + self.mean*noise(i/100) for i in range(100)]
+        self.mean = 800
+        self.noise_map = [
+            self.mean + 1.55 * self.mean * noise(i/100) 
+            for i in range(100)]
         self.cidx = -1
         self.cdir = 1
-        
+
     def value(self, max_delay: int) -> float:
-        
+
         if self.cidx == len(self.noise_map):
             self.cdir = -1
         elif self.cidx == -1:
             self.cdir = 1
-        
+
         self.cidx += self.cdir
         return self.noise_map[self.cidx]
-        
+
+
 class cPHSensor(Sensor):
-    
+
     def __init__(self, serial_number: int, port: int) -> None:
         noise = PerlinNoise(octaves=10, seed=2)
         self.mean = 7
-        self.noise_map = [self.mean + self.mean*0.2*noise(i/100) for i in range(100)]
+        self.noise_map = [
+            self.mean + self.mean * 0.2 * noise(i /100) 
+            for i in range(100)]
         self.cidx = -1
         self.cdir = 1
-        
+
     def value(self, max_delay: int) -> float:
-        
+
         if self.cidx == len(self.noise_map):
             self.cdir = -1
         elif self.cidx == -1:
             self.cdir = 1
-        
+
         self.cidx += self.cdir
         return self.noise_map[self.cidx]
- 

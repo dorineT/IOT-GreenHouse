@@ -1,9 +1,11 @@
 import sched
 
+from datetime import datetime
 from time import time, sleep
 from threading import Thread
 
 from app.manager.GreenHouse import GreenHouse
+
 
 class GreenHouseManager(Thread):
 
@@ -13,27 +15,31 @@ class GreenHouseManager(Thread):
             poll_mindelay: int = 30) -> None:
 
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
-        self.poll_mindelay: int = poll_mindelay * 60 # FIXME: set '* 60'
+        
+        # REMEMBER: FIXME: set to minutes
+        self.poll_mindelay: int = poll_mindelay * 6 
+        
         self.green_house: GreenHouse = green_house
 
         super().__init__()
 
         self.daemon = True
 
-    def _cron_job(self) -> None:
+    def _cron_job_sensors(self) -> None:
         """Fetches the sensor values from the phidget and
         computes the green house current state.
 
-        Decides if its necessary to water the green house.
         Displays a minimal summary to the LCD screen
         """
         t0 = time()
 
-        # Put here the greenhouse logic here
+        # Actualizing the sensors and computing the state
+        # Of the green house
         self.green_house.actualize_all()
+        state = self.green_house.current_state()
 
-        # TODO: Compute things to display on screen
-        self.green_house.display(str(self.green_house.sensors[0][2]))
+        # Displaying the state of the green house
+        self.green_house.display(state)
 
         # Computing time delay necessary to run cron job
         # exactly poll_mindelay minutes after previous one
@@ -41,10 +47,65 @@ class GreenHouseManager(Thread):
         ndelay = self.poll_mindelay - elapsed if self.poll_mindelay - elapsed > 0 else 0.0
 
         # Planning next job
-        self.scheduler.enter(ndelay, 1, self._cron_job)
+        self.scheduler.enter(ndelay, 1, self._cron_job_sensors)
+
+    def _cron_job_water(self) -> None:
+        """Starts the watering of the green house.
+        """
+
+        # Time to water
+        self.green_house.water()
+
+        # Computing next delay
+        ndelay = self._get_next_watering()
+
+        # Planning next job
+        self.scheduler.enter(ndelay, 0, self._cron_job_water)
+
+    def _get_next_watering(self) -> float:
+        """Returns the timestamp of the next watering
+
+        :return: timestamp of next watering
+        :rtype: float
+        """
+        now = datetime.now()
+        new_time: datetime
+
+        # It is at least 8h00 PM
+        if now.hour >= 20:
+            new_time = now.replace(
+                day=now.day + 1,
+                hour=8,
+                minute=0,
+                second=0,
+                microsecond=0)
+        # It is at least 8h00 AM
+        elif now.hour >= 8:
+            new_time = now.replace(
+                day=now.day,
+                hour=20,
+                minute=0,
+                second=0,
+                microsecond=0)
+        # It is at least 0h00 PM
+        else:
+            new_time = now.replace(
+                day=now.day,
+                hour=8,
+                minute=0,
+                second=0,
+                microsecond=0)
+
+        # Recomputing now() to be as exact as possible
+        return new_time.timestamp() - datetime.now().timestamp()
 
     def run(self) -> None:
-        self.scheduler.enter(self.poll_mindelay, 1, self._cron_job)
+        self.scheduler.enter(self.poll_mindelay, 1, self._cron_job_sensors)
+        self.scheduler.enter(
+            self._get_next_watering(),
+            0,
+            self._cron_job_water)
+        print(self.scheduler.queue)
         self.scheduler.run()
 
     def summary(self) -> dict[str, float | None]:
@@ -68,5 +129,5 @@ class GreenHouseManager(Thread):
         """
         match type:
             case 'get': return self.green_house.get_last_watering()
-            case 'post': return self.green_house.water() # TODO: put in own thread?
+            case 'post': return self.green_house.water()  # TODO: put in own thread?
             case _: return self.green_house.get_last_watering()

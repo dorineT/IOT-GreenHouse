@@ -30,7 +30,7 @@ From [this page](https://www.phidgets.com/docs/Language_-_Python), install the L
 In dev mode:
 
 ```bash
-flask --app \app.py run
+flask run --host=0.0.0.0
 ```
 
 Then, for example, curl at **<http://localhost:5000/poll>**

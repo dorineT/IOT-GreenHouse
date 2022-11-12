@@ -2,7 +2,13 @@ import logging
 import logging.handlers
 import os.path
 
-def rfh_logger(logger: logging.Logger, path: str, *, max_bytes: int, backup_count: int) -> None:
+
+def rfh_logger(
+        logger: logging.Logger,
+        path: str,
+        *,
+        max_bytes: int,
+        backup_count: int) -> None:
     """Attaches a generic rotating file handler
 
     :param logger: base logger
@@ -19,13 +25,14 @@ def rfh_logger(logger: logging.Logger, path: str, *, max_bytes: int, backup_coun
     handler = logging.handlers.RotatingFileHandler(
         filename=os.path.abspath(path),
         mode='a',
-        maxBytes=1024*1024,
-        backupCount=1)
+        maxBytes=max_bytes,
+        backupCount=backup_count)
     handler.setLevel(logging.DEBUG)
 
     # Simple formatter
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s:%(lineno)s - %(funcName)s() >>> %(message)s')
-    
+    formatter = logging.Formatter(
+        '%(asctime)s - %(levelname)s - %(filename)s:%(lineno)s - %(funcName)s() >>> %(message)s')
+
     # Attaching everything to the logger
     handler.setFormatter(formatter)
     logger.addHandler(handler)
@@ -40,10 +47,15 @@ def green_house_logger() -> logging.Logger:
     """
     gh_logger = logging.getLogger('green_house')
     gh_logger.setLevel(logging.DEBUG)
-    
-    rfh_logger(gh_logger, './app/logs/green_house.log', max_bytes=1024*1024, backup_count=1)
+
+    rfh_logger(
+        gh_logger,
+        './app/logs/green_house.log',
+        max_bytes=1024 * 1024,
+        backup_count=1)
 
     return gh_logger
+
 
 def request_logger() -> logging.Logger:
     """Creates a Rotating File Handler to log the requests
@@ -56,6 +68,10 @@ def request_logger() -> logging.Logger:
     r_logger = logging.getLogger('requests')
     r_logger.setLevel(logging.DEBUG)
 
-    rfh_logger(r_logger, './app/logs/requests.log', max_bytes=1024*1024, backup_count=1)
+    rfh_logger(
+        r_logger,
+        './app/logs/requests.log',
+        max_bytes=1024 * 1024,
+        backup_count=1)
 
     return r_logger

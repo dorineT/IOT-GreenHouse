@@ -9,6 +9,7 @@ class SensorValues(Resource):
         requests_logger.info(f'Polling sensors: {summary=}')
         return summary, 200
 
+
 class Water(Resource):
     def post(self):
         recent_watering = green_house_manager.handle_watering('post')
