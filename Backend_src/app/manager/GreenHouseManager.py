@@ -17,7 +17,7 @@ class GreenHouseManager(Thread):
         self.scheduler: sched.scheduler = sched.scheduler(time, sleep)
         
         # REMEMBER: FIXME: set to minutes
-        self.poll_mindelay: int = poll_mindelay * 6 
+        self.poll_mindelay: int = poll_mindelay * 60 * 30 
         
         self.green_house: GreenHouse = green_house
 
