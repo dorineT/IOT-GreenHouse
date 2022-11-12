@@ -131,13 +131,13 @@ class GreenHouse:
         temp = vals.get(SensorType.TEMP.value)
 
         # Checking for None
-        if co2 is None or hum is None or temp is None:
+        if co2 is None or hum is None or temp is None or light is None:
             return SENSOR_MISSING_CMD
 
         # Move the green house?
         # Reasons:
         # - Light too low (in lux) during the day
-        if 8 <= datetime.now().hour <= 20 and light < 20_000:
+        if 8 <= datetime.now().hour <= 20 and light < 1_000:
             return MUST_MOVE_CMD
 
         # Open the green house?
