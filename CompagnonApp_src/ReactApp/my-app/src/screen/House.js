@@ -3,6 +3,7 @@ import { Image,Box, HStack, VStack, Heading, Fab, Center, ScrollView, View } fro
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import phscale from '../../assets/phscale.png'
+import { StyleSheet} from "react-native";
 
 export function HouseScreen({ navigation }) {
   const [luminosite, setLuminosite] = useState(null);
@@ -95,21 +96,22 @@ export function HouseScreen({ navigation }) {
       <Box
         bg={{
           linearGradient: {
-            colors: ["warning.900", "warmGray.100"],
+            colors: ["white", "warmGray.100"],
             start: [0, 0],
             end: [1, 2],
           },
         }}
-        p="1" rounded={3} width={360} mb={5}
-      >
+        borderColor="warmGray.700"
+        borderWidth={2}
+        p="1" rounded={5} width={360} mb={5} height={200} >
         <VStack space={2} p="3" >
           <HStack space={80} justifyContent="space-around" >
-            <Heading color="white">Ph</Heading>
-            <Heading color="white">7</Heading>
+            <Heading color="warmGray.700">Ph</Heading>
+            <Heading color="warmGray.700">7</Heading>
           </HStack>
-            <Center>
-            <Image source={phscale} alt="phscale" size="xl" />
-            </Center>
+            
+          <Image source={phscale} alt="phscale" resizeMode="contain"  style={styles.canvas}/>
+            
         </VStack>
       </Box>
       </Center>
@@ -117,3 +119,13 @@ export function HouseScreen({ navigation }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  canvas: {
+    position: 'relative',
+    top: -70,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  }
+})
