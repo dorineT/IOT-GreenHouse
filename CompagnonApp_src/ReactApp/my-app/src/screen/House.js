@@ -12,7 +12,7 @@ export function HouseScreen({ navigation }) {
 
   return (
     <ScrollView>     
-      <Fab  style={{backgroundColor: 'white'}} mb={10}
+      <Fab  style={{backgroundColor: 'white'}}  renderInPortal={false}
        icon={<Ionicons name="ios-reload"  size={25} color="gray" /> }
        onPress={() => {console.log('coucou')}} />
       

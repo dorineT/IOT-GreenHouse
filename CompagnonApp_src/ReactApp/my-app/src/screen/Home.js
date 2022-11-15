@@ -38,6 +38,7 @@ export function HomeScreen({ navigation }) {
           </VStack>
         </HStack>
       </Box>    
+      <Text>Liste des alertes en fonctions des plantes</Text>
       <Image source={serreImg} alt="serre" size="2xl" />
       </Center>        
     </View>
