@@ -1,9 +1,12 @@
 import React,{useState, useEffect} from "react";
 import { Image,Box, HStack, VStack, Heading, Fab, Center, ScrollView, View } from "native-base";
 import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import phscale from '../../assets/phscale.png'
 import { StyleSheet} from "react-native";
+// UNCOMMENT TO ENABLE AXIOS
+//import { Request } from "../api/services/api.request.js";
+//let request = new Request();
 
 export function HouseScreen({ navigation }) {
   const [luminosite, setLuminosite] = useState(null);
@@ -14,11 +17,11 @@ export function HouseScreen({ navigation }) {
    }, []);
 
   return (
-    <View style={{flex: 1}}>     
+    <View style={{flex: 1}}>
       <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false}
        icon={<Ionicons name="ios-reload"  size={25} color="gray" /> }
        onPress={() => {console.log('coucou')}} />
-      
+
       <HStack space={5} mt={10} justifyContent="center">
       <Box
           bg={{
@@ -51,7 +54,7 @@ export function HouseScreen({ navigation }) {
             <Ionicons name="ios-thermometer-outline" size={40} color="white" />
             :
             <Ionicons name="ios-sunny" size={40} color="white" />
-          }      
+          }
           <Heading color="white">Ensoleillé</Heading>
           </VStack>
         </Box>
@@ -92,7 +95,7 @@ export function HouseScreen({ navigation }) {
 
       </HStack>
 
-      <Center>      
+      <Center>
       <Box
         bg={{
           linearGradient: {
@@ -109,13 +112,13 @@ export function HouseScreen({ navigation }) {
             <Heading color="warmGray.700">Ph</Heading>
             <Heading color="warmGray.700">7</Heading>
           </HStack>
-            
+
           <Image source={phscale} alt="phscale" resizeMode="contain"  style={styles.canvas}/>
-            
+
         </VStack>
       </Box>
       </Center>
-      
+
     </View>
   );
 }
