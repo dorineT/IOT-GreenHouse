@@ -24,7 +24,7 @@ import * as SQLite from "expo-sqlite";
 //import data from "../../dataPlants.json";
 
 //bd
-import {addPlantToHouse} from '../dbHelper/db-service'
+import {addPlantToHouse, getPlantsNotInHouse, getEmplacement} from '../dbHelper/db-service'
 
 const db = SQLite.openDatabase('database.db')
 
@@ -75,26 +75,14 @@ export function AddPlantScreen({navigation}) {
 
 
   function updateData(){ 
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select * from plante p
-        where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null,    
-        (_, { rows: { _array } }) => {
-          setData(_array);
-          setFilteredData([]);
-          setText('');
-        } ,
-        (_, error) => console.log('Error ', error)
-      );
-    });
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select e.*, p.nom from emplacement e
-        left join plante p on e.plante_id = p.plante_id;`, null,    
-        (_, { rows: { _array } }) => setEmplacementData(_array),
-        (_, error) => console.log('Error ', error)
-      );
-    });
+    getPlantsNotInHouse().then(result =>{
+      setData(result);
+      setFilteredData([]);
+      setText('');
+    })
+    getEmplacement().then( result => {
+      setEmplacementData(result)
+    })
   }
 
   useEffect(() => {

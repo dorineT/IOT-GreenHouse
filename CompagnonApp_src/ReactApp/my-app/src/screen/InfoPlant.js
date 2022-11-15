@@ -21,8 +21,9 @@ import { TabView, SceneMap } from 'react-native-tab-view';
 import {deletePlantFromHouse} from '../dbHelper/db-service'
 import * as SQLite from "expo-sqlite";
 import { FlatGrid } from 'react-native-super-grid';
-
+import {getEmplacement} from '../dbHelper/db-service'
 const db = SQLite.openDatabase('database.db')
+
 
 
 export function InfoPlantScreen({route, navigation})  {
@@ -46,14 +47,9 @@ export function InfoPlantScreen({route, navigation})  {
   }
 
   function updateData(){
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select e.*, p.nom from emplacement e
-        left join plante p on e.plante_id = p.plante_id;`, null,    
-        (_, { rows: { _array } }) => setEmplacementData(_array),
-        (_, error) => console.log('Error ', error)
-      );
-    });
+    getEmplacement().then(result => {
+      setEmplacementData(result)
+    })
   }
 
   useEffect(() => {

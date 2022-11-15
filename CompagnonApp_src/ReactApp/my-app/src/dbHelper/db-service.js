@@ -53,8 +53,31 @@ export async function createTable(){
   };
 
 
-export async function getPlantes(){
-//take from plants.js
+export function getPlantsNotInHouse(){
+  return new Promise((resolve, reject)=>{
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from plante p
+        where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null, 
+        (_, result) => resolve(result.rows._array),
+        (_, error) => reject(error)
+      );
+    });
+  })
+}
+
+
+export function getEmplacement(){
+  return new Promise((resolve, reject)=>{
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select e.*, p.nom from emplacement e
+        left join plante p on e.plante_id = p.plante_id;`, null,    
+        (_, result) => resolve(result.rows._array),
+        (_, error) => reject(error)
+      );
+    });
+  })
 }
 
 
@@ -72,7 +95,7 @@ export function addPlantToHouse(plante_id, labels){
   });
 }
 
-export async function deletePlantFromHouse(plante_id){  
+export function deletePlantFromHouse(plante_id){  
   return new Promise((resolve, reject) =>{
     db.transaction(tx => {     
       tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?', [plante_id],
