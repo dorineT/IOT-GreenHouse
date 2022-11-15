@@ -1,6 +1,8 @@
 import React,{useState, useEffect} from "react";
-import { Text,Box, HStack, VStack, Heading, Fab, Center, ScrollView } from "native-base";
+import { Image,Box, HStack, VStack, Heading, Fab, Center, ScrollView, View } from "native-base";
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import phscale from '../../assets/phscale.png'
 
 export function HouseScreen({ navigation }) {
   const [luminosite, setLuminosite] = useState(null);
@@ -11,95 +13,107 @@ export function HouseScreen({ navigation }) {
    }, []);
 
   return (
-    <ScrollView>     
-      <Fab  style={{backgroundColor: 'white'}}  renderInPortal={false}
+    <View style={{flex: 1}}>     
+      <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false}
        icon={<Ionicons name="ios-reload"  size={25} color="gray" /> }
        onPress={() => {console.log('coucou')}} />
       
-      <Center mt={10}>
+      <HStack space={5} mt={10} justifyContent="center">
       <Box
-        bg={{
-          linearGradient: {
-            colors: ["yellow.300", "warning.300"],
-            start: [0, 0],
-            end: [1, 0],
-          },
-        }}
-        p="5" rounded={5} width={350} mb={5}
-      >
-        <HStack space={20} justifyContent="center">
-          <Ionicons name="ios-thermometer-outline" size={50} color="white" />
-          <VStack space={5}>
-            <Heading color="white">Température</Heading>
-            <Text>25 °C</Text>
+          bg={{
+            linearGradient: {
+              colors: ["red.500", "warning.300"],
+              start: [0, 0],
+              end: [1, 0],
+            },
+          }}
+          p="1" rounded={3} mb={5} width={170}
+        >
+          <VStack p={5} space={5} alignItems="center">
+          <Ionicons name="ios-thermometer-outline" size={40} color="white" />
+          <Heading color="white">25 °C</Heading>
           </VStack>
-        </HStack>
-      </Box>
-      <Box
-        bg={{
-          linearGradient: {
-            colors: ["green.400", "green.100"],
-            start: [0, 0],
-            end: [1, 0],
-          },
-        }}
-        p="5" rounded={5} width={350} mb={5}
-      >
-        <HStack space={20} justifyContent="center">
+        </Box>
+        <Box
+          bg={{
+            linearGradient: {
+              colors: ["yellow.300", "warning.300"],
+              start: [0, 0],
+              end: [1, 0],
+            },
+          }}
+          p="1" rounded={3} mb={5} width={170}
+        >
+          <VStack p={5} space={5} alignItems="center">
           {
             luminosite === 0 ?
-            <Ionicons name="ios-thermometer-outline" size={50} color="white" />
+            <Ionicons name="ios-thermometer-outline" size={40} color="white" />
             :
-            <Ionicons name="ios-sunny" size={50} color="white" />
-          }
-        
-
-          <VStack space={5}>
-            <Heading color="white">Luminosité</Heading>
-            <Text>Ensoleillé</Text>
+            <Ionicons name="ios-sunny" size={40} color="white" />
+          }      
+          <Heading color="white">Ensoleillé</Heading>
           </VStack>
-        </HStack>
-      </Box>
+        </Box>
+
+      </HStack>
+
+      <HStack space={5} justifyContent="center">
       <Box
-        bg={{
-          linearGradient: {
-            colors: ["lightBlue.300", "blue.500"],
-            start: [0, 0],
-            end: [1, 0],
-          },
-        }}
-        p="5" rounded={5} width={350} mb={5}
-      >
-        <HStack space={20} justifyContent="center">
-          <Ionicons name="ios-water" size={50} color="white" />
-
-          <VStack space={5}>
-            <Heading color="white">Humidité</Heading>
-            <Text>50 %</Text>
+          bg={{
+            linearGradient: {
+              colors: ["lightBlue.300", "blue.500"],
+              start: [0, 0],
+              end: [1, 0],
+            },
+          }}
+          p="1" rounded={3} mb={5} width={170}
+        >
+          <VStack p={5} space={5} alignItems="center">
+          <Ionicons name="ios-water" size={40} color="white" />
+          <Heading color="white">50 %</Heading>
           </VStack>
-        </HStack>
-      </Box>
+        </Box>
+        <Box
+          bg={{
+            linearGradient: {
+              colors: ["gray.500", "warmGray.200"],
+              start: [0, 0],
+              end: [1, 0],
+            },
+          }}
+          p="1" rounded={3} mb={5} width={170}
+        >
+          <VStack p={5} space={5} alignItems="center">
+          <MaterialCommunityIcons name="molecule-co2" size={40} color="white" />
+          <Heading color="white">XX</Heading>
+          </VStack>
+        </Box>
+
+      </HStack>
+
+      <Center>      
       <Box
         bg={{
           linearGradient: {
             colors: ["warning.900", "warmGray.100"],
             start: [0, 0],
-            end: [1, 0],
+            end: [1, 2],
           },
         }}
-        p="5" rounded={5} width={350} mb={5}
+        p="1" rounded={3} width={360} mb={5}
       >
-        <HStack space={20} justifyContent="center">
-          <Ionicons name="ios-filter" size={50} color="white" />
-
-          <VStack space={5}>
+        <VStack space={2} p="3" >
+          <HStack space={80} justifyContent="space-around" >
             <Heading color="white">Ph</Heading>
-            <Text>7</Text>
-            <Text>+ image</Text>
-          </VStack>
-        </HStack>
+            <Heading color="white">7</Heading>
+          </HStack>
+            <Center>
+            <Image source={phscale} alt="phscale" size="xl" />
+            </Center>
+        </VStack>
       </Box>
       </Center>
-    </ScrollView>
+      
+    </View>
   );
 }
