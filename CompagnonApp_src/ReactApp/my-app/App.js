@@ -10,7 +10,6 @@ import { HomeScreen } from './src/screen/Home';
 import { IntermediaryScreen } from './src/screen/intermediary'
 import { HouseScreen } from './src/screen/House';
 import { SettingsScreen } from './src/screen/Setting';
-import { GreenhouseScreen } from "./src/screen/greenhouse/Greenhouse.js";
 
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
@@ -74,7 +73,6 @@ export default function App() {
                 iconName = focused ? 'tree' : 'tree-outline';
                 return <MaterialCommunityIcons name={iconName} size={size} color={color} />
               }
-
               else if (route.name === 'Paramètres') {
                 iconName = focused ? 'ios-settings' : 'ios-settings-outline';
               }
@@ -88,7 +86,7 @@ export default function App() {
         >
           <Tab.Screen name="Accueil" component={HomeScreen} />
           <Tab.Screen name="Mes plantes" component={IntermediaryScreen} />
-          <Tab.Screen name="Ma serre" component={GreenhouseScreen} />
+          <Tab.Screen name="Ma serre" component={HouseScreen} />
           <Tab.Screen name='Paramètres' component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
