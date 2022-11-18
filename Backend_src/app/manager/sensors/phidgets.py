@@ -107,13 +107,18 @@ class cCO2Sensor(Sensor):
 
     def value(self, max_delay: int) -> float:
 
-        if self.cidx == len(self.noise_map):
-            self.cdir = -1
-        elif self.cidx == -1:
-            self.cdir = 1
+        val = self.noise_map[self.cidx]
 
         self.cidx += self.cdir
-        return self.noise_map[self.cidx]
+
+        if self.cidx == len(self.noise_map):
+            self.cdir = -1
+            self.cidx = len(self.noise_map) - 1
+        elif self.cidx == -1:
+            self.cdir = 1
+            self.cidx = 0
+
+        return val
 
 
 class cPHSensor(Sensor):
@@ -124,15 +129,20 @@ class cPHSensor(Sensor):
         self.noise_map = [
             self.mean + self.mean * 0.2 * noise(i /100) 
             for i in range(100)]
-        self.cidx = -1
+        self.cidx = 0
         self.cdir = 1
 
     def value(self, max_delay: int) -> float:
 
-        if self.cidx == len(self.noise_map):
-            self.cdir = -1
-        elif self.cidx == -1:
-            self.cdir = 1
+        val = self.noise_map[self.cidx]
 
         self.cidx += self.cdir
-        return self.noise_map[self.cidx]
+
+        if self.cidx == len(self.noise_map):
+            self.cdir = -1
+            self.cidx = len(self.noise_map) - 1
+        elif self.cidx == -1:
+            self.cdir = 1
+            self.cidx = 0
+
+        return val
