@@ -119,13 +119,13 @@ class GreenHouseManager(Thread):
         self.green_house.actualize_all()
         return self.green_house.get()
 
-    def handle_watering(self, type: str = 'get') -> str | None:
+    def handle_watering(self, type: str = 'get') -> int | None:
         """Handles the water pump of the green house
 
         :param type: type of request: 'get', 'post'
         :type type: str
         :return: timestamp of last watering
-        :rtype: str | None
+        :rtype: int | None
         """
         match type:
             case 'get': return self.green_house.get_last_watering()

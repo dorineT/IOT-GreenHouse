@@ -97,15 +97,15 @@ class GreenHouse:
         self.logger.info('water pump activated')
         return self.get_last_watering()
 
-    def get_last_watering(self) -> str | None:
+    def get_last_watering(self) -> int | None:
         """Returns the time of the last watering
 
         :return: timestamp of last watering
-        :rtype: str | None
+        :rtype: int | None
         """
         if not self.last_watering:
             return None
-        return self.last_watering.strftime("%H:%M:%S")
+        return int(self.last_watering.timestamp())
 
     def get(self) -> dict[SensorType, float | None]:
         """Converts the sensor data to human readable format
