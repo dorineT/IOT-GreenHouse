@@ -95,7 +95,7 @@ export function HouseScreen({ navigation }) {
   }, []);
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <Fab
         style={{ backgroundColor: "white", position: "absolute" }}
         renderInPortal={false}
@@ -130,128 +130,129 @@ export function HouseScreen({ navigation }) {
             </VStack>
           </Alert>
         </Collapse>
+      <ScrollView >
+        <HStack space={5} mt={3} justifyContent="center">
+          <Box
+            bg={{
+              linearGradient: {
+                colors: ["red.500", "warning.300"],
+                start: [0, 0],
+                end: [1, 0],
+              },
+            }}
+            p="1"
+            rounded={3}
+            mb={5}
+            width={170}
+          >
+            <VStack p={5} space={5} alignItems="center">
+              <Ionicons name="ios-thermometer-outline" size={40} color="white" />
+              <Heading color="white">{temperature}°C</Heading>
+            </VStack>
+          </Box>
+          <Box
+            bg={{
+              linearGradient: {
+                colors: ["yellow.300", "warning.300"],
+                start: [0, 0],
+                end: [1, 0],
+              },
+            }}
+            p="1"
+            rounded={3}
+            mb={5}
+            width={170}
+          >
+            <VStack p={5} space={5} alignItems="center">
+              {lightText === "Nuit" ? (
+                <Ionicons name="ios-moon" size={40} color="white" />
+              ) : lightText === "Nuageux" ? (
+                <Ionicons name="ios-cloud" size={40} color="white" />
+              ) : (
+                <Ionicons name="ios-sunny" size={40} color="white" />
+              )}
+              <Heading color="white">{lightText}</Heading>
+            </VStack>
+          </Box>
+        </HStack>
 
-      <HStack space={5} mt={3} justifyContent="center">
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["red.500", "warning.300"],
-              start: [0, 0],
-              end: [1, 0],
-            },
-          }}
-          p="1"
-          rounded={3}
-          mb={5}
-          width={170}
-        >
-          <VStack p={5} space={5} alignItems="center">
-            <Ionicons name="ios-thermometer-outline" size={40} color="white" />
-            <Heading color="white">{temperature}°C</Heading>
-          </VStack>
-        </Box>
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["yellow.300", "warning.300"],
-              start: [0, 0],
-              end: [1, 0],
-            },
-          }}
-          p="1"
-          rounded={3}
-          mb={5}
-          width={170}
-        >
-          <VStack p={5} space={5} alignItems="center">
-            {lightText === "Nuit" ? (
-              <Ionicons name="ios-moon" size={40} color="white" />
-            ) : lightText === "Nuageux" ? (
-              <Ionicons name="ios-cloud" size={40} color="white" />
-            ) : (
-              <Ionicons name="ios-sunny" size={40} color="white" />
-            )}
-            <Heading color="white">{lightText}</Heading>
-          </VStack>
-        </Box>
-      </HStack>
+        <HStack space={5} justifyContent="center">
+          <Box
+            bg={{
+              linearGradient: {
+                colors: ["lightBlue.300", "blue.500"],
+                start: [0, 0],
+                end: [1, 0],
+              },
+            }}
+            p="1"
+            rounded={3}
+            mb={5}
+            width={170}
+          >
+            <VStack p={5} space={5} alignItems="center">
+              <Ionicons name="ios-water" size={40} color="white" />
+              <Heading color="white">{humidity} %</Heading>
+            </VStack>
+          </Box>
+          <Box
+            bg={{
+              linearGradient: {
+                colors: ["gray.500", "warmGray.200"],
+                start: [0, 0],
+                end: [1, 0],
+              },
+            }}
+            p="1"
+            rounded={3}
+            mb={5}
+            width={170}
+          >
+            <VStack p={5} space={5} alignItems="center">
+              <MaterialCommunityIcons
+                name="molecule-co2"
+                size={40}
+                color="white"
+              />
+              <Heading color="white">{co2}</Heading>
+            </VStack>
+          </Box>
+        </HStack>
 
-      <HStack space={5} justifyContent="center">
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["lightBlue.300", "blue.500"],
-              start: [0, 0],
-              end: [1, 0],
-            },
-          }}
-          p="1"
-          rounded={3}
-          mb={5}
-          width={170}
-        >
-          <VStack p={5} space={5} alignItems="center">
-            <Ionicons name="ios-water" size={40} color="white" />
-            <Heading color="white">{humidity} %</Heading>
-          </VStack>
-        </Box>
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["gray.500", "warmGray.200"],
-              start: [0, 0],
-              end: [1, 0],
-            },
-          }}
-          p="1"
-          rounded={3}
-          mb={5}
-          width={170}
-        >
-          <VStack p={5} space={5} alignItems="center">
-            <MaterialCommunityIcons
-              name="molecule-co2"
-              size={40}
-              color="white"
-            />
-            <Heading color="white">{co2}</Heading>
-          </VStack>
-        </Box>
-      </HStack>
+        <Center>
+          <Box
+            bg={{
+              linearGradient: {
+                colors: ["white", "warmGray.100"],
+                start: [0, 0],
+                end: [1, 2],
+              },
+            }}
+            borderColor="warmGray.600"
+            borderWidth={2}
+            p="1"
+            rounded={5}
+            width={360}
+            mb={5}
+            height={200}
+          >
+            <VStack space={2} p="3">
+              <HStack space={80} justifyContent="space-around">
+                <Heading color="warmGray.700">Ph</Heading>
+                <Heading color="warmGray.700">{ph}</Heading>
+              </HStack>
 
-      <Center>
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["white", "warmGray.100"],
-              start: [0, 0],
-              end: [1, 2],
-            },
-          }}
-          borderColor="warmGray.600"
-          borderWidth={2}
-          p="1"
-          rounded={5}
-          width={360}
-          mb={5}
-          height={200}
-        >
-          <VStack space={2} p="3">
-            <HStack space={80} justifyContent="space-around">
-              <Heading color="warmGray.700">Ph</Heading>
-              <Heading color="warmGray.700">{ph}</Heading>
-            </HStack>
-
-            <Image
-              source={phscale}
-              alt="phscale"
-              resizeMode="contain"
-              style={styles.canvas}
-            />
-          </VStack>
-        </Box>
-      </Center>
-    </ScrollView>
+              <Image
+                source={phscale}
+                alt="phscale"
+                resizeMode="contain"
+                style={styles.canvas}
+              />
+            </VStack>
+          </Box>
+        </Center>
+      </ScrollView>
+    </View>
   );
 }
 
