@@ -102,7 +102,7 @@ class cCO2Sensor(Sensor):
         self.noise_map = [
             self.mean + 1.55 * self.mean * noise(i/100) 
             for i in range(100)]
-        self.cidx = -1
+        self.cidx = 0
         self.cdir = 1
 
     def value(self, max_delay: int) -> float:
