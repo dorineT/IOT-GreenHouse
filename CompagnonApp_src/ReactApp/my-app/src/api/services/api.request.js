@@ -16,12 +16,12 @@ export default class Request {
       'ph' : 6,
       'co2' : 200,
       'temperature' : 23.9
-    }
+    };
     return new Promise((resolve) =>{
       setTimeout(() => {
         resolve(objfake)
       }, 400);
-    })
+    });
     //return api.get("/poll");
   }
 
@@ -29,7 +29,11 @@ export default class Request {
    * Gets a request containing the last time at which plants were watered.
    */
   getWaterTime() {
-    return '17-11-22 à 18h05'
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({"last_watering": 1668780738});
+      }, 400);
+    });
     //return api.get("/water");
   }
 
@@ -38,7 +42,7 @@ export default class Request {
    * Posts a request giving the time at which the plants have been watered.
    */
   sendWaterTime() {
-
-    return api.post("/water");
+    return {};
+    //return api.post("/water");
   }
 }

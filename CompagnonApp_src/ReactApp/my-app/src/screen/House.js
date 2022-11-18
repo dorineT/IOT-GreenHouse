@@ -20,7 +20,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import phscale from "../../assets/phscale.png";
 import { StyleSheet } from "react-native";
 import Request from "../api/services/api.request.js";
-let request = new Request();
 import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service";
 
 //TODO
@@ -29,6 +28,7 @@ import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service
 // update data into database
 
 export function HouseScreen({ navigation }) {
+  const request = new Request();
   const [light, setLight] = useState(null);
   const [lightText, setLightText] = useState("");
   const [humidity, setHumidity] = useState(null);
@@ -50,13 +50,13 @@ export function HouseScreen({ navigation }) {
   }
 
   function getDataFromDataBase(){
-    loadDataGreenHouse().then(result => {     
+    loadDataGreenHouse().then(result => {
       let res = result[0]
       setupLight(res.c_liminosite);
       setHumidity(res.c_humidite);
       setPh(res.c_ph);
       setCo2(res.c_co2);
-      setTemperature(res.c_temperature);      
+      setTemperature(res.c_temperature);
       setTimeData(res.moment);
       setShow(true)
     })
@@ -77,7 +77,7 @@ export function HouseScreen({ navigation }) {
         setPh(result.ph);
         setCo2(result.co2);
         setTemperature(result.temperature);
-        let current = new Date();  
+        let current = new Date();
         setTimeData(current.toLocaleDateString() + ' à ' + current.toLocaleTimeString()); //from now
         setShow(true)
         updateDabase(result)
