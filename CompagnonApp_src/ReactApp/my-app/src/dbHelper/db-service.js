@@ -84,7 +84,7 @@ export function getEmplacement(){
 export function addPlantToHouse(plante_id, labels){
   labels.forEach(element => {
     db.transaction(tx => {     
-      tx.executeSql('UPDATE emplacement set plante_id = ? where label = ?', [plante_id, element.label],
+      tx.executeSql('UPDATE emplacement set plante_id = ? where label = ?;', [plante_id, element.label],
       (txObj, resultSet) => { 
         if(resultSet.rowsAffected > 0){
           console.log('update ok')
@@ -98,9 +98,42 @@ export function addPlantToHouse(plante_id, labels){
 export function deletePlantFromHouse(plante_id){  
   return new Promise((resolve, reject) =>{
     db.transaction(tx => {     
-      tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?', [plante_id],
+      tx.executeSql('UPDATE emplacement set plante_id = null where plante_id = ?;', [plante_id],
       (txObj, resultSet) => resolve(resultSet.rowsAffected),
       (txObj, error) => reject(error))      
     })
+  })
+}
+
+
+export function updateDataGreenHouse(data, time){ 
+  console.log('update data into db') 
+  return new Promise((resolve, reject) =>{
+    db.transaction(tx => {     
+      tx.executeSql('UPDATE serre SET '        
+        + 'c_humidite = ?,'
+        + ' c_luminosite = ?,'
+        + ' c_temperature = ?,'
+        + ' c_ph = ?,'
+        + ' c_co2 = ?,'
+        + ' moment = ?'
+        +' where id_serre = ? ;', 
+        [data.humidity, data.light ,data.temperature, data.ph, data.co2, time,1],
+      (txObj, resultSet) => resolve(resultSet.rowsAffected),
+      (txObj, error) => reject(error))      
+    })
+  })
+}
+
+export function loadDataGreenHouse(){
+  return new Promise((resolve, reject)=>{
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from serre s
+        where id_serre = ?;`, [1], 
+        (_, result) => resolve(result.rows._array),
+        (_, error) => reject(error)
+      );
+    });
   })
 }
