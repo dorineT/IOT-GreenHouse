@@ -22,11 +22,6 @@ import { StyleSheet } from "react-native";
 import Request from "../api/services/api.request.js";
 import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service";
 
-//TODO
-// display time
-// get old data from database
-// update data into database
-
 export function HouseScreen({ navigation }) {
   const request = new Request();
   const [light, setLight] = useState(null);
@@ -39,6 +34,8 @@ export function HouseScreen({ navigation }) {
   const [show, setShow] = React.useState(true);
 
   function setupLight(result) {
+    if(result === null)
+      return
     setLight(result);
     if (result < 70) {
       setLightText("Nuit");

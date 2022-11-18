@@ -66,6 +66,19 @@ export function getPlantsNotInHouse(){
   })
 }
 
+export function getPlantsInHouse(){
+  return new Promise((resolve, reject)=>{
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select distinct p.* from plante p, emplacement e 
+        where p.plante_id = e.plante_id ;`, null, 
+        (_, result) => resolve(result.rows._array),
+        (_, error) => reject(error)
+      );
+    });
+  })
+}
+
 
 export function getEmplacement(){
   return new Promise((resolve, reject)=>{

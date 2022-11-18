@@ -10,13 +10,9 @@ import {
   Text,
 } from "native-base";
 import { Ionicons } from '@expo/vector-icons';
-import data from "../../dataPlants.json";
 import { StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
-import * as SQLite from "expo-sqlite";
-
-//bd
-import {getPlantes, createTable} from '../dbHelper/db-service'
+import {getPlantsInHouse} from '../dbHelper/db-service'
 
 
 const db = SQLite.openDatabase('database.db')
@@ -24,7 +20,7 @@ const db = SQLite.openDatabase('database.db')
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState([])
 
- useEffect(() => {
+  useEffect(() => {
     fetchData();
     const willFocusSubscription = navigation.addListener('focus', () => {
       fetchData();
@@ -35,18 +31,9 @@ export function PlantsScreen({ navigation }) {
   }, []);
 
   function fetchData(){
-    /*    getPlantes().then( (result) =>{
-    console.log('plus bas')
-    setPlantsList(result)
-    console.log(db)*/
-    db.transaction((tx) => {
-      tx.executeSql(
-        `select distinct p.* from plante p, emplacement e 
-        where p.plante_id = e.plante_id ;`, null,    
-        (_, { rows: { _array } }) => setPlantsList(_array),
-        (_, error) => console.log('Error ', error)
-      );
-    });
+    getPlantsInHouse().then(result =>{
+      setPlantsList(result)
+    })
   }
 
   if(plantsList.length > 0){
