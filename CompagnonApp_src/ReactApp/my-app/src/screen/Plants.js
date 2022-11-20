@@ -14,9 +14,6 @@ import { StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import {getPlantsInHouse} from '../dbHelper/db-service'
 
-
-const db = SQLite.openDatabase('database.db')
-
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState([])
 
@@ -31,7 +28,7 @@ export function PlantsScreen({ navigation }) {
   }, []);
 
   function fetchData(){
-    getPlantsInHouse().then(result =>{
+    getPlantsInHouse().then(result =>{     
       setPlantsList(result)
     })
   }

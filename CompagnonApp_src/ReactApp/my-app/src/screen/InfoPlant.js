@@ -85,7 +85,7 @@ export function InfoPlantScreen({route, navigation})  {
 
         <HStack space={3} marginTop={5}>          
           <Ionicons name="ios-thermometer-outline" size={34} color="red" />
-          <Text>{plante.temperature}</Text>
+          <Text>{plante.temperature_min} °C - {plante.temperature_max} °C</Text>
         </HStack>
 
         <HStack space={3} marginTop={5}>          
@@ -94,8 +94,14 @@ export function InfoPlantScreen({route, navigation})  {
         </HStack>
 
         <HStack space={3} marginTop={5}>          
-          <Ionicons name="ios-filter" size={34} color="grey" />
-          <Text>ph: {plante.ph}</Text>
+          <Ionicons name="ios-filter" size={34} color="grey" />          
+            {
+              plante.ph === null ?
+                <Text>Tout type de sol</Text>
+              :
+              <Text>ph: {plante.ph} </Text>
+            }
+                 
         </HStack>
 
         <HStack space={3} marginTop={5}>          

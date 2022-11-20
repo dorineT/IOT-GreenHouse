@@ -28,18 +28,10 @@ export function HomeScreen({ navigation }) {
   const [plantsAlert, setPlantsAlert] = useState([]);
   // set last water time
   const [waterState, setWaterState] = useState({date: "Pas d'arrosage récent", since: "longtemps"});
-  const [light, setLight] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [temperature, setTemperature] = useState(null);
-  const [ph, setPh] = useState(null);
-  const [co2, setCo2] = useState(null);
 
-  useEffect(() => {
-    createAlertPlants()
-    if(waterState.date === "Pas d'arrosage récent") {
-      getWaterState();
-    }   
+  useEffect(() => { 
     const willFocusSubscription = navigation.addListener('focus', () => {
+      console.log('hello')
       createAlertPlants()
       if(waterState.date === "Pas d'arrosage récent") {        
         getWaterState();
@@ -50,60 +42,93 @@ export function HomeScreen({ navigation }) {
   }, []);
 
   async function createAlertPlants(){
-    const r = await getDataFromApi()
-    const v = await getPlants()    
-    console.log('creation alerte')
+    const plants = await getPlants()
+    console.log('return getPlants ' + plants.length) 
+    if(plants.length === 0)
+      return
+    
+    const data = await getDataFromApi()
+        
+    console.log('creation alerte ')   
+    let phData = setupPh(data.ph)
 
     //en fonction des infos renvoyer par l'api et des plantes dans la serre générer des alertes
     // si 0 alerte, info success tout va bien
-    //change requete db pour avoir juste les infos necessaire (nouvelle fonction)
-    /**40% -> 75%
-    16°c -> 32 °c
+    //change requete db pour avoir juste les infos necessaire (nouvelle fonction)*/   
+    let alerts = []    
+    plants.forEach(plant => {
+      //humdidity
+      if(data.humidity < 40 ){
+        if(data.temperature > 20 && data.light > 50000)
+          alerts.push('La plante : ' + plant.nom + ' doit être arrosé au soir car il fait trop chaud actuellement!')
+        else
+          alerts.push('La plante : ' + plant.nom + ' doit être arrosé!')
+      }        
+      else if(data.humidity > 75 )
+        alerts.push('La plante : ' + plant.nom + ' a trop d\'eau!')
+      //co2
+      if(data.co2 > 1200)
+        alerts.push('La plante : ' + plant.nom + ' a besoin d\'air frais!')
+      //temp
+      if(data.temperature < plant.temperature_min)
+        alerts.push('La plante : ' + plant.nom + ' a froid!')
+      else if(data.temperature > plant.temperature_max)
+        alerts.push('La plante : ' + plant.nom + ' a trop chaud!')
+      //ph    
+      if(plant.ph !== null && phData !== plant.ph)
+        alerts.push('La plante : ' + plant.nom + ' a besoin d\' un sol ' + plant.ph + ' et vous avez un sol ' + phData)
+      
+    });
 
-    Trop chaud  ou humidité > 75% ou co2 > 1200 -> ouvrir les fenêtres
-    Les plantes ont soif (sur base de l'humidité) */
+    setPlantsAlert(alerts)   
+  
+  }
 
-    //si ces conditions sont respéctées ajouter une alert nom de la plante + message
+  function setupPh(res){    
+    if(res < 6.2)      
+      return 'alcalin'   
+    else if(res > 7.2)
+      return 'acide'
+    else
+      return 'neutre'
   }
 
   //update data in database
-  async function getDataFromApi() {
+  async function getDataFromApi() {  
+    let res = null 
     await request
       .getGreenhouseInfo()
-      .then((result) => {              
-        setLight(result.light);
-        setHumidity(result.humidity);
-        setPh(result.ph);
-        setCo2(result.co2);
-        setTemperature(result.temperature);
+      .then((result) => {                         
+        res = result
       })
       .catch((err) => {
         //getfrom database
         console.log("error with api load old data \n" + err);
-        getDataFromDataBase()
-      });      
+        res = getDataFromDataBase()
+      });    
+    return res  
   }
 
   async function getDataFromDataBase(){
+    let res
     await loadDataGreenHouse().then(result => {
-      let res = result[0]
-      setLight(res.c_liminosite);
-      setHumidity(res.c_humidite);
-      setPh(res.c_ph);
-      setCo2(res.c_co2);
-      setTemperature(res.c_temperature);
+      res = result[0]
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err))  
+    return res  
   }
 
-  async function getPlants() {    
-    await getPlantsInHouse().then(result =>{          
-      setPlants(result)
+  async function getPlants() {
+    let res
+    await getPlantsInHouse().then(result =>{
+      setPlants(result)         
+      res = result
     })    
+    return res
   }
 
   const getWaterState = () => { // add async later on maybe? => pas besoin tu gères déjà avec une promise
-    request.getWaterTime().then((result) => {
+    request.getWaterTime().then((result) => {   
       const lastWater = result;
       // Will set date string as "No recent watering" and since as "longtemps" if invalid request object
       let currentWater = {date: "Pas d'arrosage récent", since: "longtemps"};
@@ -129,14 +154,32 @@ export function HomeScreen({ navigation }) {
   };
 
   const AlertPlant  = () => {
-    if(plantsAlert.length > 0){
-      return (
-        
-        plants.map((plant, index) => <Text key={index} style={styles.plantInfo}> - {plant.nom} n°{index} : Rien à signaler</Text>)
+    if(plantsAlert.length > 0){ 
+      return (        
+        plantsAlert.map(
+          (alert, index) => 
+          <Alert key={index} variant="left-accent" colorScheme="warning" ml={4} mr={4} mb={2} mt={2} status="warning">
+          <VStack space={2} flexShrink={1} w="100%">
+            <HStack
+              flexShrink={1}
+              space={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <HStack space={2} flexShrink={1} alignItems="center">
+                <Alert.Icon />
+                <Text mr={5} fontSize="md" fontWeight="medium" color="coolGray.800">
+                  {alert}
+                </Text>
+              </HStack>
+            </HStack>
+          </VStack>
+        </Alert>
+        )
         
       )
     }
-    else{
+    else if(plants.length > 0){
       return(
         <Alert variant="left-accent" colorScheme="success" ml={4} mr={4} mb={2} mt={2} status="success">
         <VStack space={2} flexShrink={1} w="100%">

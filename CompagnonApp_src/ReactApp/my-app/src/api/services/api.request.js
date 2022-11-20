@@ -11,16 +11,16 @@ export default class Request {
    */
   getGreenhouseInfo() {
     let objfake = {
-      'humidity' : 40,
+      'humidity' : 50,
       'light' : 300,
-      'ph' : 6,
-      'co2' : 200,
-      'temperature' : 23.9
+      'ph' : 7,
+      'co2' : 1000,
+      'temperature' : 22
     };
     return new Promise((resolve) =>{
       setTimeout(() => {
         resolve(objfake)
-      }, 400);
+      }, 300);
     });
     //return api.get("/poll");
   }
