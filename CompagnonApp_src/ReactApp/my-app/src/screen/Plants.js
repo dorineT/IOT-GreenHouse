@@ -8,17 +8,18 @@ import {
   Pressable,
   Fab,
   Text,
+  Center,
 } from "native-base";
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet } from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import React, { useState, useEffect } from "react";
 import {getPlantsInHouse} from '../dbHelper/db-service'
+import bgImg from '../../assets/fieldImg.jpg'
 
 export function PlantsScreen({ navigation }) {
   const [plantsList, setPlantsList ] =  useState([])
 
-  useEffect(() => {
-    fetchData();
+  useEffect(() => {   
     const willFocusSubscription = navigation.addListener('focus', () => {
       fetchData();
     });
@@ -36,6 +37,7 @@ export function PlantsScreen({ navigation }) {
   if(plantsList.length > 0){
     return (
       <View style={styles.container}>
+      <ImageBackground source={bgImg} resizeMode="cover" style={styles.image}>
       <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false} shadow={6} 
        icon={<Ionicons name="ios-add" size={25} color="green" />} 
        onPress={() => {navigation.navigate('Mes plantes',{
@@ -106,18 +108,25 @@ export function PlantsScreen({ navigation }) {
           keyExtractor={(item) => item.plante_id}
         />
       </Box>
+      </ImageBackground>
       </View>
     );
   }
   else{
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1}}>
+      <ImageBackground source={bgImg} resizeMode="cover" style={styles.imageCenter}>
       <Fab  style={{backgroundColor: 'white', position:'absolute'}} renderInPortal={false} shadow={6} 
        icon={<Ionicons name="ios-add" size={25} color="green" />} 
        onPress={() => {navigation.navigate('Mes plantes',{
         screen: 'Nouvelle plante'        
        })}} />
-      <Text>Ajoutez une plante dans votre serre !</Text>
+        <Center mt={200}>
+        <Text fontSize="xl" fontWeight="bold" color="coolGray.200">
+        Ajoutez une plante dans votre serre !
+        </Text>      
+        </Center>
+      </ImageBackground>
     </View>
     );
   }
@@ -132,5 +141,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+  },
+  image: {
+    flex: 1,
+    
+  },
+  imageCenter:{
+    flex:1,
+    justifyContent: 'center'
+
   }
 });

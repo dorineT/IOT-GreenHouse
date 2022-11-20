@@ -18,9 +18,10 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import phscale from "../../assets/phscale.png";
-import { StyleSheet } from "react-native";
+import { StyleSheet,ImageBackground } from "react-native";
 import Request from "../api/services/api.request.js";
 import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service";
+import bgImg from '../../assets/fieldImg.jpg'
 
 export function HouseScreen({ navigation }) {
   const request = new Request();
@@ -93,6 +94,7 @@ export function HouseScreen({ navigation }) {
 
   return (
     <View style={{ flex: 1 }}>
+      <ImageBackground source={bgImg} resizeMode="cover" style={styles.image}>
       <Fab
         style={{ backgroundColor: "white", position: "absolute" }}
         renderInPortal={false}
@@ -249,6 +251,7 @@ export function HouseScreen({ navigation }) {
           </Box>
         </Center>
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }
@@ -261,4 +264,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  image: {
+    flex: 1,
+    justifyContent: "center"
+  }
 });
