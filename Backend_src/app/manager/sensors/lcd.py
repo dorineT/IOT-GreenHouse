@@ -33,8 +33,8 @@ class cLCD(Thread):
         self.logger = logger
         self._screen = LCD()
         self.queue = queue
-        self._serial_number = serial_number
-        self._port = port
+        self._screen.setDeviceSerialNumber(serial_number)
+        self._screen.setHubPort(port)
         self._timeout = timeout
 
     def handle_message(self, message: str) -> None:
