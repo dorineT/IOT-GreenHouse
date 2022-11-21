@@ -27,6 +27,17 @@ From [this page](https://www.phidgets.com/docs/Language_-_Python), install the L
 
 ## Launch the webserver
 
+**Sensor table**:
+|             | HUB Serial Number | Channel | Port |
+|-------------|-------------------|---------|------|
+| Light       | 672154            | /       | 0    |
+| Humidity    | 672154            | /       | 1    |
+| Temperature | 672154            | /       | 2    |
+| CO2         | 672154            | /       | 3    |
+| PH          | 672154            | /       | 4    |
+| LCD         | 672154            | /       | 5    |
+| RELAY       | 319197            | 1       | /    |
+
 In dev mode:
 
 ```bash
