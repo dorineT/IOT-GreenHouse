@@ -39,7 +39,7 @@ class cDOutput:
         if not self._do.getAttached():
             self._do.close()
             self.logger.error(
-                f'DO was not attached with {self._do}')
+                f'DO was not attached with {timeout=}')
             self.logger.info('Water pump stopped')
             return
 
