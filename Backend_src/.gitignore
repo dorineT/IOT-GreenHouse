@@ -2,7 +2,7 @@
 __pycache__/
 
 # Removing mypy cache
-mypy_cache/
+.mypy_cache/
 
 # Removing log files
 app/logs/*.log
