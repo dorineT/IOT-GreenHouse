@@ -95,9 +95,18 @@ class GreenHouse:
         :return: timestamp of last watering
         :rtype: str | None
         """
-        self.last_watering = datetime.now()
+        now = datetime.now()
+        timeout = 5000
+        duration = 30
+
+        # Let the previous watering finish, if any
+        if self.last_watering and now.timestamp() - self.last_watering.timestamp() < 1.5 * \
+                (timeout / 1000 + duration):
+            return self.get_last_watering()
+
+        self.last_watering = now
         Thread(target=self.digital_output.action,
-               args=(5000, 20)).start()
+               args=(timeout, duration)).start()
         return self.get_last_watering()
 
     def get_last_watering(self) -> int | None:
