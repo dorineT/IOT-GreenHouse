@@ -8,11 +8,13 @@ from app.manager.GreenHouseManager import GreenHouseManager
 from app.manager.sensors.phidgets import SensorType
 from app.manager.sensors.phidgets import cTempSensor, cLightSensor, cHumSensor, cCO2Sensor, cPHSensor
 from app.manager.sensors.lcd import cLCD
+from app.manager.sensors.digital_output import cDOutput
 
 app = Flask(__name__)
 
 # Green house
 phub_serial_number = 672154
+ikit_serial_number = 319197
 
 gh_logger = green_house_logger()
 green_house = GreenHouse(
@@ -24,6 +26,10 @@ green_house = GreenHouse(
         serial_number=phub_serial_number,
         port=5,
         timeout=5000),
+    digital_output=cDOutput(
+        logger=gh_logger,
+        serial_number=ikit_serial_number,
+        channel=1),
     sensors=[
         (SensorType.LIGHT, cLightSensor(serial_number=phub_serial_number, port=0), None),
         (SensorType.HUM, cHumSensor(serial_number=phub_serial_number, port=1), None),

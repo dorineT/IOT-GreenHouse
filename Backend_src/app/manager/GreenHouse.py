@@ -3,11 +3,13 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime
+from threading import Thread
 
 from Phidget22.PhidgetException import PhidgetException
 
 from app.manager.sensors.errors import NotYetAttachedError
 from app.manager.sensors.phidgets import Sensor, SensorType
+from app.manager.sensors.digital_output import cDOutput
 from app.manager.sensors.lcd import cLCD
 from app.manager.sensors.lcd import MUST_CLOSE_CMD, MUST_OPEN_CMD, MUST_WATER_CMD
 from app.manager.sensors.lcd import EVERYTHING_OK_CMD, SENSOR_MISSING_CMD, MUST_MOVE_CMD
@@ -18,6 +20,7 @@ class GreenHouse:
     logger: logging.Logger
     sensor_millidelay: int
     lcd_screen: cLCD
+    digital_output: cDOutput
     sensors: list[tuple[SensorType, Sensor, float | None]
                   ] = field(default_factory=list)
     last_watering: datetime | None = None
@@ -93,8 +96,8 @@ class GreenHouse:
         :rtype: str | None
         """
         self.last_watering = datetime.now()
-        # TODO: find a way to start the pump from here
-        self.logger.info('water pump activated')
+        Thread(target=self.digital_output.action,
+               args=(5000, 20)).start()
         return self.get_last_watering()
 
     def get_last_watering(self) -> int | None:

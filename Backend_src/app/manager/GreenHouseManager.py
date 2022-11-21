@@ -116,7 +116,7 @@ class GreenHouseManager(Thread):
         :rtype: dict[str, float | None]
         """
         self.green_house.actualize_all()
-        
+
         state = self.green_house.current_state()
         # Displaying the state of the green house
         self.green_house.display(state)
@@ -133,5 +133,5 @@ class GreenHouseManager(Thread):
         """
         match type:
             case 'get': return self.green_house.get_last_watering()
-            case 'post': return self.green_house.water()  # TODO: put in own thread?
+            case 'post': return self.green_house.water()
             case _: return self.green_house.get_last_watering()
