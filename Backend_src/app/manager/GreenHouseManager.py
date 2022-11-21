@@ -105,7 +105,6 @@ class GreenHouseManager(Thread):
             self._get_next_watering(),
             0,
             self._cron_job_water)
-        print(self.scheduler.queue)
         self.scheduler.run()
 
     def summary(self) -> dict[str, float | None]:
@@ -117,6 +116,11 @@ class GreenHouseManager(Thread):
         :rtype: dict[str, float | None]
         """
         self.green_house.actualize_all()
+        
+        state = self.green_house.current_state()
+        # Displaying the state of the green house
+        self.green_house.display(state)
+
         return self.green_house.get()
 
     def handle_watering(self, type: str = 'get') -> int | None:
