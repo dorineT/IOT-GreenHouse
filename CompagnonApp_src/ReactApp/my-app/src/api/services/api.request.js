@@ -15,7 +15,7 @@ export default class Request {
       'light' : 300,
       'ph' : 7,
       'co2' : 1000,
-      'temperature' : 19
+      'temperature' : 26
     };
     return new Promise((resolve) =>{
       setTimeout(() => {

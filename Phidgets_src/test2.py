@@ -1,27 +1,23 @@
 from Phidget22.Phidget import *
-from Phidget22.Devices.VoltageRatioInput import *
+from Phidget22.Devices.DigitalOutput import *
 import time
 
-def onSensorChange(self, sensorValue, sensorUnit):
-    print("SensorValue: " + str(sensorValue))
-    print("SensorUnit: " + str(sensorUnit.symbol))
-    print("----------")
-
 def main():
-    voltageRatioInput0 = VoltageRatioInput()
-    voltageRatioInput0.setChannel(1)
+    digitalOutput1 = DigitalOutput()
 
-    voltageRatioInput0.setOnSensorChangeHandler(onSensorChange)
+    digitalOutput1.setDeviceSerialNumber(319197)
+    digitalOutput1.setChannel(1)
 
-    voltageRatioInput0.openWaitForAttachment(5000)
+    digitalOutput1.openWaitForAttachment(5000)
 
-    voltageRatioInput0.setSensorType(VoltageRatioSensorType.TMP1000_0)
+    digitalOutput1.setDutyCycle(1)
 
     try:
         input("Press Enter to Stop\n")
     except (Exception, KeyboardInterrupt):
         pass
 
-    voltageRatioInput0.close()
+    digitalOutput1.close()
+    #digitalOutput1.setDutyCycle(0)
 
 main()
