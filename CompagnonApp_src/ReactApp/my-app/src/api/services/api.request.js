@@ -11,11 +11,11 @@ export default class Request {
    */
   getGreenhouseInfo() {
     let objfake = {
-      'humidity' : 50,
-      'light' : 300,
+      'humidity' : 40,
+      'light' : 30000,
       'ph' : 7,
       'co2' : 1000,
-      'temperature' : 26
+      'temperature' :28
     };
     return new Promise((resolve) =>{
       setTimeout(() => {
@@ -42,7 +42,7 @@ export default class Request {
    * Posts a request giving the time at which the plants have been watered.
    */
   sendWaterTime() {
-    return {};
+    console.log('plouf')
     //return api.post("/water");
   }
 }

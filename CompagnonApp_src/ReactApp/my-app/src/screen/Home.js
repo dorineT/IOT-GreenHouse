@@ -51,20 +51,20 @@ export function HomeScreen({ navigation }) {
     let alerts = [];
     plantsList.forEach((plant) => {
       //humdidity
-      if (data.humidity < 40) {
+      if (data.humidity!== null && data.humidity < 40) {
         if (data.temperature > 20 && data.light > 50000)
           alerts.push("La plante : " + plant.nom +" doit être arrosé au soir car il fait trop chaud actuellement!");
         else 
           alerts.push("La plante : " + plant.nom + " doit être arrosé!");
-      } else if (data.humidity > 75)
+      } else if (data.humidity!== null && data.humidity > 75)
         alerts.push("La plante : " + plant.nom + " a trop d'eau!");
       //co2
-      if (data.co2 > 1200)
+      if (data.co2!== null && data.co2 > 1200)
         alerts.push("La plante : " + plant.nom + " a besoin d'air frais!");
       //temp
-      if (data.temperature < plant.temperature_min)
+      if (data.temperature!== null && data.temperature < plant.temperature_min)
         alerts.push("La plante : " + plant.nom + " a froid!");
-      else if (data.temperature > plant.temperature_max)
+      else if (data.temperature!== null && data.temperature > plant.temperature_max)
         alerts.push("La plante : " + plant.nom + " a trop chaud!");
       //ph
       if (plant.ph !== null && phData !== plant.ph)
@@ -281,7 +281,7 @@ export function HomeScreen({ navigation }) {
           m={5}
           w="90%"
         >
-          <Pressable onPress={() => console.log("plouf")}>
+          <Pressable onPress={() => request.sendWaterTime()}>
             {({ isPressed }) => {
               return (
                 <Box

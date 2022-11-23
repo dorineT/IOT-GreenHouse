@@ -50,11 +50,12 @@ export default function App() {
         <Tab.Navigator
           screenOptions={({route})=> ({
             headerStyle: {
-              backgroundColor: '#84cc16',
+              backgroundColor: 'green',
             },
             headerTintColor: '#fff',
             headerTitleStyle: {
               fontWeight: 'bold',
+              fontStyle: 'italic'
             },
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;

@@ -45,7 +45,8 @@
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.6"
+    "@babel/core": "^7.18.6",
+    "yarn-audit-fix": "^9.3.7"
   },
   "bugs": {
     "url": "https://github.com/GeekyAnts/nativebase-templates/issues"

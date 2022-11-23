@@ -34,16 +34,18 @@ export function HouseScreen({ navigation }) {
   const [timeData, setTimeData] = useState(null);
   const [show, setShow] = React.useState(true);
 
-  function setupLight(result) {
-    if(result === null)
+  function setupLight(result) {    
+    if(result === null){
+      setLightText("Pas de données");
       return
-    setLight(result);
+    }
+      setLight(result);
     if (result < 70) {
       setLightText("Nuit");
     } else if (result < 25000) {
       setLightText("Nuageux");
     } else {
-      setLightText("Ensolleilé");
+      setLightText("Ensoleillé");
     }
   }
 
@@ -146,7 +148,12 @@ export function HouseScreen({ navigation }) {
           >
             <VStack p={5} space={5} alignItems="center">
               <Ionicons name="ios-thermometer-outline" size={40} color="white" />
-              <Heading color="white">{temperature}°C</Heading>
+              {
+                temperature !== null ?
+                <Heading color="white">{temperature}°C</Heading>
+                :
+                <Heading color="white">Pas de données</Heading>
+              }              
             </VStack>
           </Box>
           <Box
@@ -191,7 +198,13 @@ export function HouseScreen({ navigation }) {
           >
             <VStack p={5} space={5} alignItems="center">
               <Ionicons name="ios-water" size={40} color="white" />
-              <Heading color="white">{humidity} %</Heading>
+              {
+                humidity !== null?
+                <Heading color="white">{humidity} %</Heading>
+                :
+                <Heading color="white">Pas de données</Heading>
+              }
+              
             </VStack>
           </Box>
           <Box
@@ -213,7 +226,12 @@ export function HouseScreen({ navigation }) {
                 size={40}
                 color="white"
               />
-              <Heading color="white">{co2}</Heading>
+              {
+                co2 !== null?
+                <Heading color="white">{co2} ppm</Heading>
+                :
+                <Heading color="white">Pas de données</Heading>
+              }
             </VStack>
           </Box>
         </HStack>
@@ -235,10 +253,15 @@ export function HouseScreen({ navigation }) {
             mb={5}
             height={200}
           >
-            <VStack space={2} p="3">
-              <HStack space={80} justifyContent="space-around">
+            <VStack space={1} p="3">
+              <HStack space={10} justifyContent="space-between">
                 <Heading color="warmGray.700">Ph</Heading>
-                <Heading color="warmGray.700">{ph}</Heading>
+                {
+                  ph != null?
+                  <Heading color="warmGray.700">{ph}</Heading>
+                  :
+                  <Heading color="warmGray.700">Pas de données</Heading>
+                }
               </HStack>
 
               <Image
