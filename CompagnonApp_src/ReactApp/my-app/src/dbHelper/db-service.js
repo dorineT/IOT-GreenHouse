@@ -119,8 +119,7 @@ export function deletePlantFromHouse(plante_id){
 }
 
 
-export function updateDataGreenHouse(data, time){ 
-  console.log('update data into db') 
+export function updateDataGreenHouse(data, time){   
   return new Promise((resolve, reject) =>{
     db.transaction(tx => {     
       tx.executeSql('UPDATE serre SET '        
@@ -138,12 +137,24 @@ export function updateDataGreenHouse(data, time){
   })
 }
 
+export function updateLastWaterTime(time){   
+  return new Promise((resolve, reject) =>{
+    db.transaction(tx => {     
+      tx.executeSql('UPDATE serre SET '        
+        + 'arrosage = ? '
+        +' where id_serre = ? ;', 
+        [time,1],
+      (txObj, resultSet) => resolve(resultSet.rowsAffected),
+      (txObj, error) => reject(error))      
+    })
+  })
+}
+
 export function loadDataGreenHouse(){
   return new Promise((resolve, reject)=>{
     db.transaction((tx) => {
       tx.executeSql(
-        `select * from serre s
-        where id_serre = ?;`, [1], 
+        `select * from serre where id_serre = ? ;`, [1], 
         (_, result) => resolve(result.rows._array),
         (_, error) => reject(error)
       );

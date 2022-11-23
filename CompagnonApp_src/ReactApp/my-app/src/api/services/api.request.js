@@ -11,15 +11,16 @@ export default class Request {
    */
   getGreenhouseInfo() {
     let objfake = {
-      'humidity' : 40,
+      'humidity' : 70,
       'light' : 30000,
       'ph' : 7,
       'co2' : 1000,
       'temperature' :28
     };
-    return new Promise((resolve) =>{
+    return new Promise((resolve, reject) =>{
       setTimeout(() => {
         resolve(objfake)
+        //reject('test') test error handling
       }, 300);
     });
     //return api.get("/poll");
@@ -28,7 +29,7 @@ export default class Request {
   /**
    * Gets a request containing the last time at which plants were watered.
    */
-  getWaterTime() {
+  getWaterTime() {    
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({"last_watering": 1668780738});
@@ -44,5 +45,6 @@ export default class Request {
   sendWaterTime() {
     console.log('plouf')
     //return api.post("/water");
+    //if ok update new time arrosage in db with function updateLastWaterTime
   }
 }

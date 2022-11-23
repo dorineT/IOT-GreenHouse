@@ -16,7 +16,7 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { dateToString } from "../commons/utils/dateFormater.js";
 import { useEffect, useState } from "react";
 import Request from "../api/services/api.request.js";
-import { getPlantsInHouse, loadDataGreenHouse } from "../dbHelper/db-service";
+import { getPlantsInHouse, loadDataGreenHouse, updateLastWaterTime } from "../dbHelper/db-service";
 
 export function HomeScreen({ navigation }) {
   const request = new Request();
@@ -44,11 +44,17 @@ export function HomeScreen({ navigation }) {
   async function createAlertPlants() {
     const plantsList = await getPlants();  
     if (plantsList.length === 0) return;
-
+    let alerts = [];
     const data = await getDataFromApi();
+    if(data === "no news"){      
+      alerts.push('Erreur lors du chargement des données')
+      setPlantsAlert(alerts)
+      return
+    }
+
     let phData = setupPh(data.ph);
 
-    let alerts = [];
+    
     plantsList.forEach((plant) => {
       //humdidity
       if (data.humidity!== null && data.humidity < 40) {
@@ -67,7 +73,7 @@ export function HomeScreen({ navigation }) {
       else if (data.temperature!== null && data.temperature > plant.temperature_max)
         alerts.push("La plante : " + plant.nom + " a trop chaud!");
       //ph
-      if (plant.ph !== null && phData !== plant.ph)
+      if (phData !== "Pas de données" && plant.ph !== null && phData !== plant.ph)
         alerts.push(
           "La plante : " +
             plant.nom +
@@ -82,7 +88,8 @@ export function HomeScreen({ navigation }) {
   }
 
   function setupPh(res) {
-    if (res < 6.2) return "alcalin";
+    if(res === null) return "Pas de données"
+    else if (res < 6.2) return "alcalin";
     else if (res > 7.2) return "acide";
     else return "neutre";
   }
@@ -98,7 +105,7 @@ export function HomeScreen({ navigation }) {
       .catch((err) => {
         //getfrom database
         console.log("error with api load old data \n" + err);
-        res = getDataFromDataBase();
+        res = "no news"//getDataFromDataBase();
       });
     return res;
   }
@@ -146,10 +153,12 @@ export function HomeScreen({ navigation }) {
             Math.abs((localDate - lastDate) / 1000) / (60 * 60)
           );
           currentWater.since = `${elapsed} ${elapsed > 1 ? "heures" : "heure"}`;
+          updateLastWaterTime(currentWater.date)
         }
 
         // Update last water time
         setWaterState(currentWater);
+        
       })
       .catch((err) => {
         console.log("error with api load old data \n" + err);

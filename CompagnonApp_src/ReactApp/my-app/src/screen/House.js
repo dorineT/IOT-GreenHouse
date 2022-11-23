@@ -49,10 +49,10 @@ export function HouseScreen({ navigation }) {
     }
   }
 
-  function getDataFromDataBase(){
+  function getDataFromDataBase(){  
     loadDataGreenHouse().then(result => {
       let res = result[0]
-      setupLight(res.c_liminosite);
+      setupLight(res.c_luminosite);
       setHumidity(res.c_humidite);
       setPh(res.c_ph);
       setCo2(res.c_co2);
@@ -63,8 +63,11 @@ export function HouseScreen({ navigation }) {
     .catch(err => console.log(err))
   }
 
-  function updateDabase(data){
-    updateDataGreenHouse(data, timeData)
+  function updateDabase(data){   
+    updateDataGreenHouse(data, timeData).then((res) =>{
+      console.log('ok')
+    })
+    .catch(err => console.log(err))
   }
 
   //update data in database
@@ -101,9 +104,9 @@ export function HouseScreen({ navigation }) {
         style={{ backgroundColor: "white", position: "absolute" }}
         renderInPortal={false}
         icon={<Ionicons name="ios-reload" size={25} color="gray" />}
-        onPress={() => {
+        onPress={() => {        
           getDataFromApi();
-          //getDataFromDataBase() only for testing
+          //getDataFromDataBase()
         }}
       />
 
@@ -248,7 +251,7 @@ export function HouseScreen({ navigation }) {
             borderColor="warmGray.600"
             borderWidth={2}
             p="1"
-            rounded={5}
+            rounded={3}
             width={360}
             mb={5}
             height={200}
