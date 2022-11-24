@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {NativeBaseProvider } from 'native-base';
+import React,{useEffect} from 'react';
+import {NativeBaseProvider, Text } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +15,7 @@ import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import * as SQLite from "expo-sqlite";
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Location from 'expo-location'
 
 const Tab = createBottomTabNavigator();
 
@@ -44,8 +45,23 @@ const config = {
 };
 
 export default function App() {
-  return (
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      console.log('Location permission granted', location);
+    })();
+  }, []);
+
+
+  return (    
     <NativeBaseProvider config={config}>
+      
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({route})=> ({

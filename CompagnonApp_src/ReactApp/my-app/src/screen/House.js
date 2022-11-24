@@ -22,6 +22,7 @@ import { StyleSheet,ImageBackground } from "react-native";
 import Request from "../api/services/api.request.js";
 import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service";
 import bgImg from '../../assets/fieldImg.jpg'
+import {wifi} from "../commons/utils/checkWifi"
 
 export function HouseScreen({ navigation }) {
   const request = new Request();
@@ -95,6 +96,11 @@ export function HouseScreen({ navigation }) {
   useEffect(() => {
     //get data from api
     getDataFromApi();
+    const willFocusSubscription = navigation.addListener("focus", () => {
+      wifi();
+    });
+
+    return willFocusSubscription;    
   }, []);
 
   return (

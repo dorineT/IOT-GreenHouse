@@ -17,6 +17,7 @@ import { dateToString } from "../commons/utils/dateFormater.js";
 import { useEffect, useState } from "react";
 import Request from "../api/services/api.request.js";
 import { getPlantsInHouse, loadDataGreenHouse, updateLastWaterTime } from "../dbHelper/db-service";
+import {wifi} from "../commons/utils/checkWifi"
 
 export function HomeScreen({ navigation }) {
   const request = new Request();
@@ -33,6 +34,7 @@ export function HomeScreen({ navigation }) {
     const willFocusSubscription = navigation.addListener("focus", () => {
       setPlantsAlert([])
       createAlertPlants();
+      wifi();
       if (waterState.date === "Pas d'arrosage récent") {
         getWaterState();
       }
