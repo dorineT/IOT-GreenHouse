@@ -23,10 +23,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/serreresize.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.dorineunamur.myapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ef784177-6353-46f3-879c-32770a5d6f45"
+      }
     }
   }
 }

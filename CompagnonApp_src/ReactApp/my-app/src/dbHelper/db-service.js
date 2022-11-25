@@ -2,54 +2,88 @@ import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase('database.db')
 
-export async function createTable(){
+export function createTable(){
     // create table if not exists
+    /*
     const query1 = `CREATE TABLE IF NOT EXISTS plante (
-        plante_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT NOT NULL,
-        type_plante TEXT NOT NULL,
-        plantation TEXT NOT NULL,
-        recolte TEXT NOT NULL,
-        terre TEXT NOT NULL,
-        eau TEXT NOT NULL,
-        ph TEXT NOT NULL,
-        humidite TEXT NOT NULL,
-        temperature TEXT NOT NULL,
-        description TEXT NOT NULL,
-        image TEXT NOT NULL,
-        lien TEXT
-    );`;
+      plante_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nom TEXT NOT NULL,
+      type_plante TEXT NOT NULL,
+      plantation TEXT NOT NULL,
+      recolte TEXT NOT NULL,
+      terre TEXT NOT NULL,
+      eau TEXT NOT NULL,
+      ph TEXT,
+      humidite TEXT NOT NULL,
+      temperature_min REAL  NOT NULL,
+      temperature_max REAL NOT NULL,
+      description TEXT NOT NULL,
+      image TEXT NOT NULL,
+      lien TEXT
+    );`
 
-    const query2 = `CREATE TABLE IF NOT EXISTS serre (
-        id_serre INTEGER PRIMARY KEY,
-        type_action TEXT CHECK( type_action  IN ('arrosage','c_humidite','c_luminosite', 'c_temperature','c_ph') ) NOT NULL,
-        moment datetime default current_timestamp
-    );`;
+    CREATE TABLE IF NOT EXISTS serre (
+      id_serre INTEGER PRIMARY KEY AUTOINCREMENT,
+      arrosage TEXT default null,
+      c_humidite INTEGER default null,
+      c_luminosite INTEGER default null, 
+      c_temperature REAL default null,
+      c_ph INTEGER default null,
+      c_co2 INTEGER default null,
+      moment datetime default current_timestamp
+    );
 
-    const query3 = `CREATE TABLE IF NOT EXISTS emplacement (
-        label INTEGER PRIMARY KEY AUTOINCREMENT,
-        plante_id  INTEGER  NOT NULL,
-        FOREIGN KEY (plante_id) 
+    CREATE TABLE IF NOT EXISTS emplacement (
+      label INTEGER PRIMARY KEY,
+      plante_id  INTEGER,
+      FOREIGN KEY (plante_id) 
           REFERENCES plante (plante_id) 
-    );`;
-  
-
-    const query4 = `INSERT INTO plante (nom,type_plante,plantation,recolte,terre,eau,ph,humidite,temperature,image, description)
+    );
+    
+    INSERT INTO plante (nom,type_plante,plantation,recolte,terre,eau,ph,humidite,temperature_min,temperature_max ,image, description)
     VALUES 
-    ('Basilic','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-    ('Thym','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-    ('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé','> 10 degrés c','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraicheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');
-    `;
+    ('Basilic','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,21,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
+    ('Thym','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
+    ('Paquerette','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien',null ,'drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
+    ('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');
 
-    const db =  openDatabase()
-    db.transaction(tx => {  
-        
-        tx.executeSql(query1)
-        tx.executeSql(query2)
-        tx.executeSql(query3)
-        tx.executeSql(query4)
-    })
-    console.log("fin creation")
+    insert into emplacement (label) 
+    values 
+    (1),
+    (2),
+    (3),
+    (4),
+    (5),
+    (6);
+
+    insert into serre (id_serre) 
+    values (1);
+
+    UPDATE emplacement set plante_id = 1 where label = 1;`*/
+
+    return new Promise((resolve, reject)=>{
+      db.transaction(
+        function(tx){
+          tx.executeSql("CREATE TABLE IF NOT EXISTS plante (plante_id INTEGER PRIMARY KEY AUTOINCREMENT,nom TEXT NOT NULL,type_plante TEXT NOT NULL,plantation TEXT NOT NULL,recolte TEXT NOT NULL,terre TEXT NOT NULL,eau TEXT NOT NULL,ph TEXT,humidite TEXT NOT NULL,temperature_min REAL  NOT NULL,temperature_max REAL NOT NULL,description TEXT NOT NULL,image TEXT NOT NULL,lien TEXT);");
+          tx.executeSql("CREATE TABLE IF NOT EXISTS serre (id_serre INTEGER PRIMARY KEY AUTOINCREMENT,arrosage TEXT default null,c_humidite INTEGER default null,c_luminosite INTEGER default null, c_temperature REAL default null,c_ph INTEGER default null,c_co2 INTEGER default null,moment datetime default current_timestamp);");
+          tx.executeSql("CREATE TABLE IF NOT EXISTS emplacement (label INTEGER PRIMARY KEY,plante_id  INTEGER,FOREIGN KEY (plante_id) REFERENCES plante (plante_id) );");
+          tx.executeSql("INSERT INTO plante (nom,type_plante,plantation,recolte,terre,eau,ph,humidite,temperature_min,temperature_max ,image, description) "
+          + "VALUES "
+          +"('Basilic','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,21,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'), "
+          +"('Thym','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'), "
+          +"('Paquerette','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien',null ,'drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.')," 
+          +"('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');");
+          tx.executeSql("insert into emplacement (label) values (1),(2),(3),(4),(5),(6);");
+          tx.executeSql("insert into serre (id_serre) values (1);");
+          tx.executeSql("UPDATE emplacement set plante_id = 1 where label = 1;");
+        },
+        function(error){
+          reject(error)
+        },
+        function(){
+          resolve(true)
+        });}
+      );
   };
 
 

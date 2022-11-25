@@ -16,6 +16,8 @@ import { Asset } from 'expo-asset';
 import * as SQLite from "expo-sqlite";
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createTable } from './src/dbHelper/db-service'
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +38,7 @@ async function openDatabase2(){
 }*/
 
 
-const db = openDatabase2()
+//const db = openDatabase2()
 
 const config = {
   dependencies: {
@@ -46,8 +48,37 @@ const config = {
 
 export default function App() {
 
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem('firstLaunch', value)
+    } catch (e) {
+      // saving error
+    }
+  }
+
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('firstLaunch')
+      if(value !== null) {
+        console.log('db exist')
+      }
+      else{
+        storeData('true')
+        createTable().then((result) =>{
+          console.log(result)
+        }).catch(err => console.log(err))
+      }
+    } catch(e) {
+      console.log('error',e)
+    }
+  }
+  
+  getData()
+
   useEffect(() => {
-    (async () => {
+
+    (async () => {      
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         console.log('Permission to access location was denied');
