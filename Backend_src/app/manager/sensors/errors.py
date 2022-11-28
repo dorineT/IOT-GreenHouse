@@ -1,0 +1,2 @@
+class NotYetAttachedError(Exception):
+    pass

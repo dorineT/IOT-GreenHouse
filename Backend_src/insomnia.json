@@ -1,0 +1,102 @@
+{
+    "_type": "export",
+    "__export_format": 4,
+    "__export_date": "2022-11-04T08:50:52.780Z",
+    "__export_source": "insomnia.desktop.app:v2022.6.0",
+    "resources": [
+        {
+            "_id": "req_f469762cd3a540838d05a7ea4cb72df6",
+            "parentId": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "modified": 1667551618540,
+            "created": 1667551598197,
+            "url": "{{ _.baseUrl }}poll",
+            "name": "Sensor poll",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1667551598197,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "parentId": null,
+            "modified": 1667551307821,
+            "created": 1667551307821,
+            "name": "IoT",
+            "description": "",
+            "scope": "collection",
+            "_type": "workspace"
+        },
+        {
+            "_id": "req_03a83f92b3b644b48b031e3775b74013",
+            "parentId": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "modified": 1667551592871,
+            "created": 1667551537334,
+            "url": "{{ _.baseUrl }}water",
+            "name": "Water",
+            "description": "",
+            "method": "POST",
+            "body": {},
+            "parameters": [],
+            "headers": [],
+            "authentication": {},
+            "metaSortKey": -1667551537334,
+            "isPrivate": false,
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
+            "_id": "env_bdb9fbdcaa488888f880e730411e5f776845c4c5",
+            "parentId": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "modified": 1667551526361,
+            "created": 1667551307841,
+            "name": "Base Environment",
+            "data": {
+                "baseUrl": "http://localhost:5000/"
+            },
+            "dataPropertyOrder": {
+                "&": [
+                    "baseUrl"
+                ]
+            },
+            "color": null,
+            "isPrivate": false,
+            "metaSortKey": 1667551307841,
+            "_type": "environment"
+        },
+        {
+            "_id": "jar_bdb9fbdcaa488888f880e730411e5f776845c4c5",
+            "parentId": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "modified": 1667551307844,
+            "created": 1667551307844,
+            "name": "Default Jar",
+            "cookies": [],
+            "_type": "cookie_jar"
+        },
+        {
+            "_id": "spc_a8395c7f11954ece849a81fc48537a19",
+            "parentId": "wrk_6e4ee5952cd74fa48630ec60016c30b4",
+            "modified": 1667551307830,
+            "created": 1667551307830,
+            "fileName": "IoT",
+            "contents": "",
+            "contentType": "yaml",
+            "_type": "api_spec"
+        }
+    ]
+}

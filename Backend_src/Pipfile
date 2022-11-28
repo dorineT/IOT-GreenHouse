@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+phidget22 = "*"
+flask = "*"
+flask-restful = "*"
+gunicorn = "*"
+colorama = "*"
+perlin-noise = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
