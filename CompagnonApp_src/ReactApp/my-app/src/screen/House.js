@@ -176,9 +176,9 @@ export function HouseScreen({ navigation }) {
               <Ionicons name="ios-thermometer-outline" size={40} color="white" />
               {
                 temperature !== null ?
-                <Heading color="white">{temperature}°C</Heading>
+                <Heading textAlign='center' color="white">{temperature}°C</Heading>
                 :
-                <Heading color="white">Pas de données</Heading>
+                <Heading textAlign='center' color="white">Pas de données</Heading>
               }              
             </VStack>
           </Box>
@@ -203,7 +203,7 @@ export function HouseScreen({ navigation }) {
               ) : (
                 <Ionicons name="ios-sunny" size={40} color="white" />
               )}
-              <Heading color="white">{lightText}</Heading>
+              <Heading textAlign='center' color="white">{lightText}</Heading>
             </VStack>
           </Box>
         </HStack>
@@ -226,9 +226,9 @@ export function HouseScreen({ navigation }) {
               <Ionicons name="ios-water" size={40} color="white" />
               {
                 humidity !== null?
-                <Heading color="white">{humidity} %</Heading>
+                <Heading textAlign='center' color="white">{humidity} %</Heading>
                 :
-                <Heading color="white">Pas de données</Heading>
+                <Heading textAlign='center' color="white">Pas de données</Heading>
               }
               
             </VStack>
@@ -254,9 +254,9 @@ export function HouseScreen({ navigation }) {
               />
               {
                 co2 !== null?
-                <Heading color="white">{Math.round((co2 + Number.EPSILON) * 100) / 100} ppm</Heading>
+                <Heading textAlign='center' color="white">{Math.round((co2 + Number.EPSILON) * 100) / 100} ppm</Heading>
                 :
-                <Heading color="white">Pas de données</Heading>
+                <Heading textAlign='center' color="white">Pas de données</Heading>
               }
             </VStack>
           </Box>
