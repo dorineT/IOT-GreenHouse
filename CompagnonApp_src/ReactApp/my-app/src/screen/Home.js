@@ -147,8 +147,8 @@ export function HomeScreen({ navigation }) {
     // add async later on maybe? => pas besoin tu gères déjà avec une promise
     request
       .getWaterTime()
-      .then((result) => {
-        const lastWater = result;
+      .then((result) => {     
+        const lastWater = result.data;
         // Will set date string as "No recent watering" and since as "longtemps" if invalid request object
         let currentWater = {
           date: "Pas d'arrosage récent",
@@ -311,7 +311,7 @@ export function HomeScreen({ navigation }) {
                   style={{
                     transform: [
                       {
-                        scale: isPressed ? 0.96 : 1,
+                        scale: isPressed ? 0.6 : 1,
                       },
                     ],
                   }}

@@ -83,8 +83,6 @@ export default function App() {
         console.log('Permission to access location was denied');
         return;
       }
-      const location = await Location.getCurrentPositionAsync({});
-      console.log('Location permission granted', location);
     })();
   }, []);
 
