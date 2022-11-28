@@ -13,7 +13,8 @@ import {
   Text,
   Collapse,
   IconButton,
-  CloseIcon
+  CloseIcon,
+  Spinner
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,6 +24,7 @@ import Request from "../api/services/api.request.js";
 import { updateDataGreenHouse, loadDataGreenHouse } from "../dbHelper/db-service";
 import bgImg from '../../assets/fieldImg.jpg'
 import {wifi} from "../commons/utils/checkWifi"
+import {formatDate} from '../commons/utils/dateFormater'
 
 export function HouseScreen({ navigation }) {
   const request = new Request();
@@ -33,7 +35,8 @@ export function HouseScreen({ navigation }) {
   const [ph, setPh] = useState(null);
   const [co2, setCo2] = useState(null);
   const [timeData, setTimeData] = useState(null);
-  const [show, setShow] = React.useState(true);
+  const [show, setShow] = React.useState(false);
+  const [spinnerShow, setSpinnerShow] = React.useState(true);
 
   function setupLight(result) {    
     if(result === null){
@@ -81,12 +84,14 @@ export function HouseScreen({ navigation }) {
         setHumidity(result.humidity);
         setPh(result.ph);
         setCo2(result.co2);
-        setTemperature(result.temperature);
-        let current = new Date();
-        setTimeData(current.toLocaleDateString() + ' à ' + current.toLocaleTimeString()); //from now
-        setShow(true)
-        let timeInfo = current.toLocaleDateString() + ' à ' + current.toLocaleTimeString()
-        updateDabase(result, timeInfo)
+        setTemperature(result.temperature);   
+               
+        const datehour = formatDate(new Date()); 
+
+        setTimeData(datehour);
+        setShow(true);
+        setSpinnerShow(false)
+        updateDabase(result, datehour);
       })
       .catch((err) => {
         //getfrom database
@@ -111,8 +116,10 @@ export function HouseScreen({ navigation }) {
       <Fab
         style={{ backgroundColor: "white", position: "absolute" }}
         renderInPortal={false}
-        icon={<Ionicons name="ios-reload" size={25} color="gray" />}
-        onPress={() => {        
+        icon={<Ionicons name="ios-reload" size={30} color="gray" />}
+        onPress={() => {  
+          setShow(false)
+          setSpinnerShow(true)      
           getDataFromApi();
           //getDataFromDataBase()
         }}
@@ -141,6 +148,14 @@ export function HouseScreen({ navigation }) {
               </HStack>
             </VStack>
           </Alert>
+        </Collapse>
+        <Collapse isOpen={spinnerShow}>
+        <HStack p={5} space={2} justifyContent="center">
+            <Spinner color="emerald.500" accessibilityLabel="Chargement des données" />
+            <Heading color="emerald.500" fontSize="xl">
+              Chargement
+            </Heading>
+          </HStack>
         </Collapse>
       <ScrollView >
         <HStack space={5} mt={3} justifyContent="center">
@@ -239,7 +254,7 @@ export function HouseScreen({ navigation }) {
               />
               {
                 co2 !== null?
-                <Heading color="white">{co2} ppm</Heading>
+                <Heading color="white">{Math.round((co2 + Number.EPSILON) * 100) / 100} ppm</Heading>
                 :
                 <Heading color="white">Pas de données</Heading>
               }
@@ -269,7 +284,7 @@ export function HouseScreen({ navigation }) {
                 <Heading color="warmGray.700">Ph</Heading>
                 {
                   ph != null?
-                  <Heading color="warmGray.700">{ph}</Heading>
+                  <Heading color="warmGray.700">{Math.round((ph + Number.EPSILON) * 100) / 100}</Heading>
                   :
                   <Heading color="warmGray.700">Pas de données</Heading>
                 }

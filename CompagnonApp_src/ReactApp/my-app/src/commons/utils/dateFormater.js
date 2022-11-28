@@ -31,4 +31,22 @@ function zeroFill(number, length){
     return prefix;
 }
 
-export {dateToString};
+
+
+function padTo2Digits(num) {
+  return String(num).padStart(2, '0');
+}
+
+function formatDate(current){
+  const yyyy = current.getFullYear();
+  let mm = current.getMonth() + 1; // Months start at 0!
+  let dd = current.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+  const hoursAndMinutes = padTo2Digits(current.getHours()) + 'h' + padTo2Digits(current.getMinutes());
+  
+  return dd + '/' + mm + '/' + yyyy + ' à ' + hoursAndMinutes;      
+}
+
+export {dateToString, formatDate};
