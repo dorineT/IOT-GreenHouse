@@ -109,7 +109,7 @@ export function deletePlantFromHouse(plante_id){
 }
 
 
-export function updateDataGreenHouse(data, time){   
+export function updateDataGreenHouse(data, time){    
   return new Promise((resolve, reject) =>{
     db.transaction(tx => {     
       tx.executeSql('UPDATE serre SET '        

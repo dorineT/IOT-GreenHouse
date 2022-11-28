@@ -9,6 +9,7 @@ import {
   Alert,
   ScrollView,
   Pressable,
+  useToast,
 } from "native-base";
 import bgImg from "../../assets/fieldImg.jpg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -16,7 +17,7 @@ import { StyleSheet, ImageBackground } from "react-native";
 import { dateToString } from "../commons/utils/dateFormater.js";
 import { useEffect, useState } from "react";
 import Request from "../api/services/api.request.js";
-import { getPlantsInHouse, loadDataGreenHouse, updateLastWaterTime } from "../dbHelper/db-service";
+import { getPlantsInHouse, updateLastWaterTime } from "../dbHelper/db-service";
 import {wifi} from "../commons/utils/checkWifi"
 
 export function HomeScreen({ navigation }) {
@@ -29,6 +30,7 @@ export function HomeScreen({ navigation }) {
     date: "Pas d'arrosage récent",
     since: "longtemps",
   });
+  const toast = useToast();
 
   useEffect(() => {
     const willFocusSubscription = navigation.addListener("focus", () => {
@@ -106,19 +108,9 @@ export function HomeScreen({ navigation }) {
       })
       .catch((err) => {
         //getfrom database
-        console.log("error with api load old data \n" + err);
+        console.log("error with api\n" + err);
         res = "no news"//getDataFromDataBase();
       });
-    return res;
-  }
-
-  async function getDataFromDataBase() {
-    let res;
-    await loadDataGreenHouse()
-      .then((result) => {
-        res = result[0];
-      })
-      .catch((err) => console.log(err));
     return res;
   }
 
@@ -129,6 +121,26 @@ export function HomeScreen({ navigation }) {
       res = result;
     });
     return res;
+  }
+
+  function waterPlant(){
+    request.sendWaterTime().then(result => {
+      toast.show({
+        render: () => {
+          return <Box bg="blue.600" opacity="75" px="2" py="1" rounded="sm" mb={5}>
+                  <Text color="white">Arrosage en cours !</Text> 
+                </Box>;
+        }
+      });
+    }).catch(err => {    
+      toast.show({
+        render: () => {
+          return <Box bg="warning.700"  px="2" py="1" rounded="sm" mb={5}>
+                  <Text color="white">Erreur avec lors de la demande d'arrosage !</Text> 
+                </Box>;
+        }
+      });
+    })
   }
 
   const getWaterState = () => {
@@ -292,7 +304,7 @@ export function HomeScreen({ navigation }) {
           m={5}
           w="90%"
         >
-          <Pressable onPress={() => request.sendWaterTime()}>
+          <Pressable onPress={() => waterPlant()}>
             {({ isPressed }) => {
               return (
                 <Box

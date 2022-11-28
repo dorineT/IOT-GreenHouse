@@ -57,16 +57,16 @@ export function HouseScreen({ navigation }) {
       setHumidity(res.c_humidite);
       setPh(res.c_ph);
       setCo2(res.c_co2);
-      setTemperature(res.c_temperature);
+      setTemperature(res.c_temperature);      
       setTimeData(res.moment);
       setShow(true)
     })
     .catch(err => console.log(err))
   }
 
-  function updateDabase(data){   
-    updateDataGreenHouse(data, timeData).then((res) =>{
-      console.log('ok')
+  function updateDabase(data, time){   
+    updateDataGreenHouse(data, time).then((res) =>{
+      console.log('données mise à jour')
     })
     .catch(err => console.log(err))
   }
@@ -84,7 +84,8 @@ export function HouseScreen({ navigation }) {
         let current = new Date();
         setTimeData(current.toLocaleDateString() + ' à ' + current.toLocaleTimeString()); //from now
         setShow(true)
-        updateDabase(result)
+        let timeInfo = current.toLocaleDateString() + ' à ' + current.toLocaleTimeString()
+        updateDabase(result, timeInfo)
       })
       .catch((err) => {
         //getfrom database

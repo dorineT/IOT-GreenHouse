@@ -10,10 +10,10 @@ export default class Request {
    * Contains the following: humidity, light, ph, co2, temperature (float | null), null if connection lost
    */
   getGreenhouseInfo() {
-    let objfake = {
-      'humidity' : 70,
+    /*let objfake = {
+      'humidity' : 60,
       'light' : 30000,
-      'ph' : 7,
+      'ph' : 9,
       'co2' : 1000,
       'temperature' :28
     };
@@ -22,20 +22,20 @@ export default class Request {
         resolve(objfake)
         //reject('test') test error handling
       }, 300);
-    });
-    //return api.get("/poll");
+    });*/
+    return api.get("/poll");
   }
 
   /**
    * Gets a request containing the last time at which plants were watered.
    */
   getWaterTime() {    
-    return new Promise((resolve) => {
+    /*return new Promise((resolve) => {
       setTimeout(() => {
         resolve({"last_watering": 1668780738});
       }, 400);
-    });
-    //return api.get("/water");
+    });*/
+    return api.get("/water");
   }
 
 
@@ -44,7 +44,7 @@ export default class Request {
    */
   sendWaterTime() {
     console.log('plouf')
-    //return api.post("/water");
+    return api.post("/water");
     //if ok update new time arrosage in db with function updateLastWaterTime
   }
 }
