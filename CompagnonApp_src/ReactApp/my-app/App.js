@@ -9,11 +9,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { HomeScreen } from './src/screen/Home';
 import { IntermediaryScreen } from './src/screen/intermediary'
 import { HouseScreen } from './src/screen/House';
-import { SettingsScreen } from './src/screen/Setting';
 
-import * as FileSystem from 'expo-file-system';
-import { Asset } from 'expo-asset';
-import * as SQLite from "expo-sqlite";
+//import * as FileSystem from 'expo-file-system';
+//import { Asset } from 'expo-asset';
+//import * as SQLite from "expo-sqlite";
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Location from 'expo-location'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,7 +20,7 @@ import { createTable } from './src/dbHelper/db-service'
 
 const Tab = createBottomTabNavigator();
 
-async function openDatabase2(){
+/*async function openDatabase2(){
   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
   }
@@ -32,7 +31,7 @@ async function openDatabase2(){
   return SQLite.openDatabase('database.db');
 }
 
-/**async function removeDatabase() {
+async function removeDatabase() {
     const sqlDir = FileSystem.documentDirectory + "SQLite/";
     await FileSystem.deleteAsync(sqlDir + "dbInStorage.sqlite", {idempotent: true});
 }*/
@@ -121,9 +120,6 @@ export default function App() {
                 iconName = focused ? 'tree' : 'tree-outline';
                 return <MaterialCommunityIcons name={iconName} size={size} color={color} />
               }
-              else if (route.name === 'Paramètres') {
-                iconName = focused ? 'ios-settings' : 'ios-settings-outline';
-              }
 
               // You can return any component that you like here!
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -134,8 +130,7 @@ export default function App() {
         >
           <Tab.Screen name="Accueil" component={HomeScreen} />
           <Tab.Screen name="Mes plantes" component={IntermediaryScreen} />
-          <Tab.Screen name="Ma serre" component={HouseScreen} />
-          <Tab.Screen name='Paramètres' component={SettingsScreen} />
+          <Tab.Screen name="Ma serre" component={HouseScreen} />    
         </Tab.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>

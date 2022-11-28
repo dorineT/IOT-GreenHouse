@@ -4,62 +4,6 @@ const db = SQLite.openDatabase('database.db')
 
 export function createTable(){
     // create table if not exists
-    /*
-    const query1 = `CREATE TABLE IF NOT EXISTS plante (
-      plante_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nom TEXT NOT NULL,
-      type_plante TEXT NOT NULL,
-      plantation TEXT NOT NULL,
-      recolte TEXT NOT NULL,
-      terre TEXT NOT NULL,
-      eau TEXT NOT NULL,
-      ph TEXT,
-      humidite TEXT NOT NULL,
-      temperature_min REAL  NOT NULL,
-      temperature_max REAL NOT NULL,
-      description TEXT NOT NULL,
-      image TEXT NOT NULL,
-      lien TEXT
-    );`
-
-    CREATE TABLE IF NOT EXISTS serre (
-      id_serre INTEGER PRIMARY KEY AUTOINCREMENT,
-      arrosage TEXT default null,
-      c_humidite INTEGER default null,
-      c_luminosite INTEGER default null, 
-      c_temperature REAL default null,
-      c_ph INTEGER default null,
-      c_co2 INTEGER default null,
-      moment datetime default current_timestamp
-    );
-
-    CREATE TABLE IF NOT EXISTS emplacement (
-      label INTEGER PRIMARY KEY,
-      plante_id  INTEGER,
-      FOREIGN KEY (plante_id) 
-          REFERENCES plante (plante_id) 
-    );
-    
-    INSERT INTO plante (nom,type_plante,plantation,recolte,terre,eau,ph,humidite,temperature_min,temperature_max ,image, description)
-    VALUES 
-    ('Basilic','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,21,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-    ('Thym','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-    ('Paquerette','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien',null ,'drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.'),
-    ('Fleur','Comestible, aromatique','février - juillet','juin-novembre','pleine terre, bac','quotidien','neutre','drainé',10,30,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s','Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l''été. C''est un réel plaisir de le cueillir selon ses besoins.');
-
-    insert into emplacement (label) 
-    values 
-    (1),
-    (2),
-    (3),
-    (4),
-    (5),
-    (6);
-
-    insert into serre (id_serre) 
-    values (1);
-
-    UPDATE emplacement set plante_id = 1 where label = 1;`*/
 
     return new Promise((resolve, reject)=>{
       db.transaction(
@@ -93,6 +37,18 @@ export function getPlantsNotInHouse(){
       tx.executeSql(
         `select * from plante p
         where plante_id not in (select plante_id from emplacement e where plante_id is not null);`, null, 
+        (_, result) => resolve(result.rows._array),
+        (_, error) => reject(error)
+      );
+    });
+  })
+}
+
+export function getPlants(){
+  return new Promise((resolve, reject)=>{
+    db.transaction((tx) => {
+      tx.executeSql(
+        `select * from plante;`, null, 
         (_, result) => resolve(result.rows._array),
         (_, error) => reject(error)
       );

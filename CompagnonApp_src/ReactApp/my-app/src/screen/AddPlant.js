@@ -15,18 +15,17 @@ import {
   Center,
   Button,
   View,
-  useToast
+  useToast,
+  Collapse,
+  Alert,
+  IconButton,
+  CloseIcon
 } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import SelectableGrid from 'react-native-selectable-grid'
 import { StyleSheet } from "react-native";
-import * as SQLite from "expo-sqlite";
-//import data from "../../dataPlants.json";
+import {addPlantToHouse, getPlants, getEmplacement} from '../dbHelper/db-service'
 
-//bd
-import {addPlantToHouse, getPlantsNotInHouse, getEmplacement} from '../dbHelper/db-service'
-
-const db = SQLite.openDatabase('database.db')
 
 export function AddPlantScreen({navigation}) {
 
@@ -38,26 +37,43 @@ export function AddPlantScreen({navigation}) {
   const [filteredData, setFilteredData] = useState([]);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const [emplacementData, setEmplacementData] = useState([]);
+  const [emplacementData, setEmplacementData] = useState([]);  
   
   const onClose = () => setIsOpen(false);
+  const [show, setShow] = React.useState(false);
   const cancelRef = React.useRef(null);
   const toast = useToast();
   let sbRef = null
 
   function addPlantToDB(){  
     //get les selectCase
-    // add  bd  
-    addPlantToHouse(selectedItem_id, sbRef.selectedData())    
-    onClose()
-    updateData()    
-    toast.show({
-      render: () => {
-        return <Box bg="#a16207" opacity="75" px="2" py="1" rounded="sm" mb={5}>
-                <Text color="white">Plante ajoutée à votre liste</Text> 
-              </Box>;
+    let correct = checkEmplacement(sbRef.selectedData())
+    if(correct === false){      
+      setShow(true)
+      
+    }else{
+      addPlantToHouse(selectedItem_id, sbRef.selectedData())    
+      onClose()
+      updateData()    
+      toast.show({
+        render: () => {
+          return <Box bg="#a16207" opacity="75" px="2" py="1" rounded="sm" mb={5}>
+                  <Text color="white">Plante ajoutée à votre liste</Text> 
+                </Box>;
+        }
+      });
+    }
+  }
+
+  function checkEmplacement(data){
+    let res = true
+    if(data === null) return false
+    data.forEach(element => {
+      if(element.nom !== null){       
+        res =  false
       }
     });
+    return res
   }
 
   const searchFilterFunction = (text) => {
@@ -75,13 +91,14 @@ export function AddPlantScreen({navigation}) {
 
 
   function updateData(){ 
-    getPlantsNotInHouse().then(result =>{
+    getPlants().then(result =>{
       setData(result);
+      setShow(false)
       setFilteredData([]);
       setText('');
     })
     getEmplacement().then( result => {
-      setEmplacementData(result)
+      setEmplacementData(result)   
     })
   }
 
@@ -95,7 +112,32 @@ export function AddPlantScreen({navigation}) {
           <AlertDialog.Content>
             <AlertDialog.CloseButton />
             <AlertDialog.Header style={styles.dialogBox}>Choisissez l'emplacement</AlertDialog.Header>
-            <AlertDialog.Body> <HStack><Text>Vous avez choisi: {selectedItem}</Text></HStack>
+            <AlertDialog.Body> 
+            <Collapse isOpen={show}>
+            <Alert variant="left-accent" colorScheme="error" m={4} status="error">
+                <VStack space={2} flexShrink={1} w="100%">
+                  <HStack
+                    flexShrink={1}
+                    space={2}
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <HStack space={2} flexShrink={1} alignItems="center">
+                      <Alert.Icon />
+                      <Text color='coolGray.800'>
+                        Emplacement occupé !
+                      </Text>
+                      <IconButton variant="unstyled" _focus={{
+                        borderWidth: 0
+                      }} icon={<CloseIcon size="3" />} _icon={{
+                        color: "coolGray.600"
+                      }} onPress={() => setShow(false)} />
+                    </HStack>
+                  </HStack>
+                </VStack>
+              </Alert>
+            </Collapse>  
+            <HStack><Text>Vous avez choisi: {selectedItem}</Text></HStack>
             
             <View margin={5} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <SelectableGrid 
@@ -133,7 +175,6 @@ export function AddPlantScreen({navigation}) {
                   )}
                 />
               </View>
-            
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button.Group space={2}>
