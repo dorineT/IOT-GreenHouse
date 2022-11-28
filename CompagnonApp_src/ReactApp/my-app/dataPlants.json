@@ -1,0 +1,26 @@
+[{
+    "id": "1",
+    "nom": "Basilic",
+    "image" : "https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png",
+    "type": "Comestible, aromatique",
+    "lien": "https://jardinage.ooreka.fr/plante/voir/16/basilic",
+    "plantation" : "février - juillet",
+    "terre" : "pleine terre, bac",
+    "recolte" : "juin - novembre",
+    "eau" : "quotidien",
+    "temperature" : "> 10 degré",
+    "ph" : "neutre",
+    "humidite" : "drainé",
+    "description" : "Le basilic est une plante aromatique facile à cultiver en extérieur ou en intérieur, en pot ou en pleine terre. Très apprécié pour sa fraîcheur et sa saveur, il relève les plats de l'été. C'est un réel plaisir de le cueillir selon ses besoins."
+    
+},
+{
+  "id": "2",
+  "nom": "Thym",
+  "image" : "https://www.tomatopiu.com/wp-content/uploads/2016/08/BASILICO-GRECOsmall.png"
+},
+{
+  "id": "3",
+  "nom": "Paquerette",
+  "image" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxaRQ_b37aFTSkwh8OKmhTqf6zlJHHMbG4GByIG-VYzg&s"
+}]
