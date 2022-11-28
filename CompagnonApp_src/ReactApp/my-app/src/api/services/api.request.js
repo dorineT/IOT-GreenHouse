@@ -2,6 +2,8 @@
 // /water = get/post
 
 import api from "./api.js";
+import axios from 'axios';
+const baseUrl = "http://10.42.0.1:5000"
 
 export default class Request {
 
@@ -10,20 +12,8 @@ export default class Request {
    * Contains the following: humidity, light, ph, co2, temperature (float | null), null if connection lost
    */
   getGreenhouseInfo() {
-    /*let objfake = {
-      'humidity' : 60,
-      'light' : 30000,
-      'ph' : 9,
-      'co2' : 1000,
-      'temperature' :28
-    };
-    return new Promise((resolve, reject) =>{
-      setTimeout(() => {
-        resolve(objfake)
-        //reject('test') test error handling
-      }, 300);
-    });*/
-    return api.get("/poll");
+    //return axios.get(baseUrl+'/poll')
+    return axios.get('http://192.168.137.1:5000/poll')   
   }
 
   /**
@@ -35,7 +25,8 @@ export default class Request {
         resolve({"last_watering": 1668780738});
       }, 400);
     });*/
-    return api.get("/water");
+    //return axios.get(baseUrl+'/water')
+    return api.get('http://192.168.137.1:5000/water');
   }
 
 
@@ -44,7 +35,8 @@ export default class Request {
    */
   sendWaterTime() {
     console.log('plouf')
-    return api.post("/water");
+    //return axios.post(baseUrl+'/water')
+    return api.post('http://192.168.137.1:5000/water');
     //if ok update new time arrosage in db with function updateLastWaterTime
   }
 }

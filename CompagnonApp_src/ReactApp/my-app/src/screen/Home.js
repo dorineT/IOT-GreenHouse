@@ -104,7 +104,7 @@ export function HomeScreen({ navigation }) {
     await request
       .getGreenhouseInfo()
       .then((result) => {
-        res = result;
+        res = result.data;
       })
       .catch((err) => {
         //getfrom database
@@ -136,7 +136,7 @@ export function HomeScreen({ navigation }) {
       toast.show({
         render: () => {
           return <Box bg="warning.700"  px="2" py="1" rounded="sm" mb={5}>
-                  <Text color="white">Erreur avec lors de la demande d'arrosage !</Text> 
+                  <Text color="white">Erreur lors de la demande d'arrosage !</Text> 
                 </Box>;
         }
       });
