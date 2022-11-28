@@ -76,6 +76,7 @@ export function HouseScreen({ navigation }) {
     request
       .getGreenhouseInfo()
       .then((result) => {
+        console.log(result)
         setupLight(result.light);
         setHumidity(result.humidity);
         setPh(result.ph);
