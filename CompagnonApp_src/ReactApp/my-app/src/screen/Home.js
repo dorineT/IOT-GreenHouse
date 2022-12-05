@@ -160,7 +160,7 @@ export function HomeScreen({ navigation }) {
     // If correct watering time
     if(lastWater.last_watering !== null) {
       // Convert unix timestamp
-      const lastDate = new Date(lastWater.last_watering * 1000); // Times 1000 to convert in milliseconds
+      const lastDate = new Date(/*lastWater.last_watering * 1000*/); // Times 1000 to convert in milliseconds
       //lastDate.setSeconds(lastWater.last_watering);
       currentWater.date = dateToString(lastDate);
       // Find time elapsed since last watering
