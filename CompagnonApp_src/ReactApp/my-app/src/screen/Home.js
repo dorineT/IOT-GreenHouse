@@ -37,8 +37,16 @@ export function HomeScreen({ navigation }) {
       setPlantsAlert([])
       createAlertPlants();
       wifi();
-      if (waterState.date === "Pas d'arrosage récent") {
-        getWaterState();
+      if(waterState.date === "Pas d'arrosage récent") {
+        // add async later on maybe? => pas besoin tu gères déjà avec une promise
+        request
+          .getWaterTime()
+          .then((result) => {
+            getWaterState(result);
+          })
+          .catch((err) => {
+            console.log("error with api load old data \n" + err);
+        });
       }
     });
 
@@ -46,11 +54,11 @@ export function HomeScreen({ navigation }) {
   }, [plants]);
 
   async function createAlertPlants() {
-    const plantsList = await getPlants();  
+    const plantsList = await getPlants();
     if (plantsList.length === 0) return;
     let alerts = [];
     const data = await getDataFromApi();
-    if(data === "no news"){      
+    if(data === "no news"){
       alerts.push('Erreur lors du chargement des données')
       setPlantsAlert(alerts)
       return
@@ -58,13 +66,13 @@ export function HomeScreen({ navigation }) {
 
     let phData = setupPh(data.ph);
 
-    
+
     plantsList.forEach((plant) => {
       //humdidity
       if (data.humidity!== null && data.humidity < 40) {
         if (data.temperature > 20 && data.light > 50000)
           alerts.push("La plante : " + plant.nom +" doit être arrosé au soir car il fait trop chaud actuellement!");
-        else 
+        else
           alerts.push("La plante : " + plant.nom + " doit être arrosé!");
       } else if (data.humidity!== null && data.humidity > 75)
         alerts.push("La plante : " + plant.nom + " a trop d'eau!");
@@ -104,7 +112,7 @@ export function HomeScreen({ navigation }) {
     await request
       .getGreenhouseInfo()
       .then((result) => {
-        res = result.data;
+        res = result;
       })
       .catch((err) => {
         //getfrom database
@@ -125,58 +133,47 @@ export function HomeScreen({ navigation }) {
 
   function waterPlant(){
     request.sendWaterTime().then(result => {
+      getWaterState(result);
       toast.show({
         render: () => {
           return <Box bg="blue.600" opacity="75" px="2" py="1" rounded="sm" mb={5}>
-                  <Text color="white">Arrosage en cours !</Text> 
+                  <Text color="white">Arrosage en cours !</Text>
                 </Box>;
         }
       });
-    }).catch(err => {    
+    }).catch(err => {
       toast.show({
         render: () => {
           return <Box bg="warning.700"  px="2" py="1" rounded="sm" mb={5}>
-                  <Text color="white">Erreur lors de la demande d'arrosage !</Text> 
+                  <Text color="white">Erreur avec lors de la demande d'arrosage !</Text>
                 </Box>;
         }
       });
     })
   }
 
-  const getWaterState = () => {
-    // add async later on maybe? => pas besoin tu gères déjà avec une promise
-    request
-      .getWaterTime()
-      .then((result) => {     
-        const lastWater = result.data;
-        // Will set date string as "No recent watering" and since as "longtemps" if invalid request object
-        let currentWater = {
-          date: "Pas d'arrosage récent",
-          since: "longtemps",
-        };
+  const getWaterState = (result) => {
 
-        // If correct watering time
-        if (lastWater.last_watering !== null) {
-          // Convert unix timestamp
-          const lastDate = new Date(lastWater.last_watering * 1000); // Times 1000 to convert in milliseconds
-          //lastDate.setSeconds(lastWater.last_watering);
-          currentWater.date = dateToString(lastDate);
-          // Find time elapsed since last watering
-          const localDate = new Date();
-          const elapsed = Math.round(
-            Math.abs((localDate - lastDate) / 1000) / (60 * 60)
-          );
-          currentWater.since = `${elapsed} ${elapsed > 1 ? "heures" : "heure"}`;
-          updateLastWaterTime(currentWater.date)
-        }
+    const lastWater = result.data;
+    // Will set lastWater as previous known water state ; If first getWaterState call, will be the default React hook values specified above
+    let currentWater = waterState;
+    // If correct watering time
+    if(lastWater.last_watering !== null) {
+      // Convert unix timestamp
+      const lastDate = new Date(lastWater.last_watering * 1000); // Times 1000 to convert in milliseconds
+      //lastDate.setSeconds(lastWater.last_watering);
+      currentWater.date = dateToString(lastDate);
+      // Find time elapsed since last watering
+      const localDate = new Date();
+      const elapsed = Math.round(
+        Math.abs((localDate - lastDate) / 1000) / (60 * 60)
+      );
+      currentWater.since = `${elapsed} ${elapsed > 1 ? "heures" : "heure"}`;
+      updateLastWaterTime(currentWater.date)
+    }
 
-        // Update last water time
-        setWaterState(currentWater);
-        
-      })
-      .catch((err) => {
-        console.log("error with api load old data \n" + err);
-      });
+    // Update last water time
+    setWaterState(currentWater);
   };
 
   const AlertPlant = () => {
@@ -311,7 +308,7 @@ export function HomeScreen({ navigation }) {
                   style={{
                     transform: [
                       {
-                        scale: isPressed ? 0.6 : 1,
+                        scale: isPressed ? 0.96 : 1,
                       },
                     ],
                   }}
