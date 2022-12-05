@@ -21,7 +21,7 @@ Then to download the dependencies automaticaly, execute the following command:
 pipenv install
 ```
 
-To laucnh the virtual environment, execute the following command:
+To launch the virtual environment, execute the following command:
 
 ```bash
 pipenv shell
