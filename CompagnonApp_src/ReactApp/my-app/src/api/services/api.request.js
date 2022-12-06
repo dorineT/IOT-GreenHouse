@@ -28,12 +28,7 @@ export default class Request {
    * Posts a request giving the time at which the plants have been watered.
    */
   sendWaterTime() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({'data':{"last_watering": 1668780738}});
-      }, 400);
-    });
-    //return api.post('/water', {timeout: 6000});
+    return api.post('/water', {timeout: 6000});
     //if ok update new time arrosage in db with function updateLastWaterTime
   }
 }
