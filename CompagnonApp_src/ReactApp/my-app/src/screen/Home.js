@@ -10,6 +10,7 @@ import {
   ScrollView,
   Pressable,
   useToast,
+  Button,
 } from "native-base";
 import bgImg from "../../assets/fieldImg.jpg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -31,6 +32,7 @@ export function HomeScreen({ navigation }) {
     since: "longtemps",
   });
   const toast = useToast();
+  const [isWatering, setIsWatering] = useState(false);
 
   useEffect(() => {
     const willFocusSubscription = navigation.addListener("focus", () => {
@@ -131,7 +133,8 @@ export function HomeScreen({ navigation }) {
     return res;
   }
 
-  function waterPlant(){
+  function waterPlant(){ 
+    setIsWatering(true)
     request.sendWaterTime().then(result => {
       getWaterState(result);
       toast.show({
@@ -139,13 +142,18 @@ export function HomeScreen({ navigation }) {
           return <Box bg="blue.600" opacity="75" px="2" py="1" rounded="sm" mb={5}>
                   <Text color="white">Arrosage en cours !</Text>
                 </Box>;
-        }
+        }        
       });
-    }).catch(err => {
+      setTimeout(function(){
+        setIsWatering(false)
+    }, 20000);
+      
+    }).catch(err => {   
+      setIsWatering(false)  
       toast.show({
         render: () => {
           return <Box bg="warning.700"  px="2" py="1" rounded="sm" mb={5}>
-                  <Text color="white">Erreur avec lors de la demande d'arrosage !</Text>
+                  <Text color="white">Erreur lors de la demande d'arrosage !</Text>
                 </Box>;
         }
       });
@@ -288,43 +296,13 @@ export function HomeScreen({ navigation }) {
 
           <AlertPlant />
         </ScrollView>
-        <Box
-          bg={{
-            linearGradient: {
-              colors: ["lightBlue.300", "blue.500"],
-              start: [0, 0],
-              end: [1, 0],
-            },
-          }}
-          p="1"
-          rounded={3}
-          m={5}
-          w="90%"
-        >
-          <Pressable onPress={() => waterPlant()}>
-            {({ isPressed }) => {
-              return (
-                <Box
-                  style={{
-                    transform: [
-                      {
-                        scale: isPressed ? 0.96 : 1,
-                      },
-                    ],
-                  }}
-                >
-                  <VStack p={5} space={5} alignItems="center">
-                    <MaterialCommunityIcons
-                      name="water-pump"
-                      size={50}
-                      color="white"
-                    />
-                  </VStack>
-                </Box>
-              );
-            }}
-          </Pressable>
-        </Box>
+        <Button margin={5} p={2} onPress={() => waterPlant()} isDisabled={isWatering}>
+        <MaterialCommunityIcons
+            name="water-pump"
+            size={50}
+            color="white"
+          />
+        </Button>
       </ImageBackground>
     </View>
   );

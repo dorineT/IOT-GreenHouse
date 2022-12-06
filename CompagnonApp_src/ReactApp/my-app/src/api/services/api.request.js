@@ -1,9 +1,5 @@
 // /poll = get
-// /water = get/post
-
 import api from "./api.js";
-//import axios from 'axios';
-//const baseUrl = "http://10.42.0.1:5000"
 
 export default class Request {
 
@@ -12,7 +8,7 @@ export default class Request {
    * Contains the following: humidity, light, ph, co2, temperature (float | null), null if connection lost
    */
   getGreenhouseInfo() { 
-    return api.get('/poll')   
+    return api.get('/poll', {timeout: 6000})   
   }
 
   /**
@@ -24,7 +20,7 @@ export default class Request {
         resolve({"last_watering": 1668780738});
       }, 400);
     });*/
-    return api.get('/water');
+    return api.get('/water', {timeout: 6000});
   }
 
 
@@ -32,8 +28,12 @@ export default class Request {
    * Posts a request giving the time at which the plants have been watered.
    */
   sendWaterTime() {
-    console.log('plouf')
-    return api.post('/water');
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({'data':{"last_watering": 1668780738}});
+      }, 400);
+    });
+    //return api.post('/water', {timeout: 6000});
     //if ok update new time arrosage in db with function updateLastWaterTime
   }
 }

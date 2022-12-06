@@ -97,6 +97,7 @@ export function HouseScreen({ navigation }) {
         //getfrom database
         console.log("error with api load old data \n" + err);
         getDataFromDataBase()
+        setSpinnerShow(false)
       });
   }
 
