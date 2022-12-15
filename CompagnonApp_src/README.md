@@ -1,8 +1,7 @@
 
 # Portager application compagnon
 
-![s5](https://user-images.githubusercontent.com/60292032/207862485-2736c8f6-9e91-4b7e-ba23-90654c98d5db.jpg)
-
+<img src="https://user-images.githubusercontent.com/60292032/207862485-2736c8f6-9e91-4b7e-ba23-90654c98d5db.jpg" data-canonical-src="https://user-images.githubusercontent.com/60292032/207862485-2736c8f6-9e91-4b7e-ba23-90654c98d5db.jpg" width="200" height="400" />
 
 ## Fonctionnalités
 
