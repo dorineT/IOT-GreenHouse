@@ -36,7 +36,7 @@ yarn install
 yarn start
 ```
 ou :     
-(Ajouter l'option --tunnel si vous rencontrer des problème)
+(Ajouter l'option --tunnel si vous rencontrez des problème)
 ```bach
 expo start
 ```
