@@ -1,6 +1,9 @@
 
 # Portager application compagnon
 
+![s5](https://user-images.githubusercontent.com/60292032/207862485-2736c8f6-9e91-4b7e-ba23-90654c98d5db.jpg)
+
+
 ## Fonctionnalités
 
 - Gestion des plantes du portager
